@@ -20,4 +20,8 @@ Trip:
 
 Registration:
     path: /registration
-    controller: App\Controller\RegistrationController::index
+    controller: App\Controller\RegistrationController::register
+
+Security:
+    path: /login
+    controller: App\Controller\SecurityController::login
