@@ -10,9 +10,9 @@ Campus:
     path: /campus
     controller: App\Controller\CampusController::index
 
-Participant:
+User:
     path: /profil
-    controller: App\Controller\ParticipantController::index
+    controller: App\Controller\UserController::index
 
 Trip:
     path: /trip
