@@ -18,10 +18,14 @@ Trip:
     path: /trip
     controller: App\Controller\TripController::index
 
-Registration:
-    path: /registration
+Register:
+    path: /register
     controller: App\Controller\RegistrationController::register
 
-Security:
+login:
     path: /login
     controller: App\Controller\SecurityController::login
+
+logout:
+    path: /logout
+    controller: App\Controller\SecurityController::logout

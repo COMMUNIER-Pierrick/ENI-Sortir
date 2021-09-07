@@ -64,4 +64,9 @@ class Campus
         return $this;
     }
 
+    public function getNom()
+    {
+        return $this->nom;
+    }
+
 }
