@@ -1,3 +1,23 @@
-#index:
-#    path: /
-#    controller: App\Controller\DefaultController::index
+Main:
+    path: /
+    controller: App\Controller\MainController::index
+
+City:
+    path: /city
+    controller: App\Controller\CityController::index
+
+Campus:
+    path: /campus
+    controller: App\Controller\CampusController::index
+
+Participant:
+    path: /profil
+    controller: App\Controller\ParticipantController::index
+
+Trip:
+    path: /trip
+    controller: App\Controller\TripController::index
+
+Registration:
+    path: /registration
+    controller: App\Controller\RegistrationController::index
