@@ -6,13 +6,13 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-class ParticipantController extends AbstractController
+class UserController extends AbstractController
 {
 
     public function index(): Response
     {
-        return $this->render('participant/index.html.twig', [
-            'controller_name' => 'ParticipantController',
+        return $this->render('user/index.html.twig', [
+            'controller_name' => 'UserController',
         ]);
     }
 }
