@@ -1,22 +1,26 @@
 Main:
-    path: /
-    controller: App\Controller\MainController::index
+  path: /
+  controller: App\Controller\MainController::index
 
 City:
-    path: /city
-    controller: App\Controller\CityController::index
+  path: /city
+  controller: App\Controller\CityController::index
 
 Campus:
-    path: /campus
-    controller: App\Controller\CampusController::index
+  path: /campus
+  controller: App\Controller\CampusController::index
+
+Profil_user:
+  path: /profil/{id<\d+>}
+  controller: App\Controller\UserController::seeUser
 
 User:
-    path: /profil
-    controller: App\Controller\UserController::index
+  path: /profil
+  controller: App\Controller\UserController::index
 
 Trip:
-    path: /trip
-    controller: App\Controller\TripController::index
+  path: /trip
+  controller: App\Controller\TripController::index
 
 login:
     path: /login
@@ -45,3 +49,5 @@ Admin_deleteUser:
 Admin_cancelTrip:
     path: /admin/cancel
     controller: App\Controller\AdminController::cancelTrip
+
+
