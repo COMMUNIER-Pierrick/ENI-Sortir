@@ -69,4 +69,16 @@ class Campus
         return $this->nom;
     }
 
+    public function setNom()
+    {
+        return $this->nom;
+    }
+
+    public function getId()
+    {
+        return $this->id;
+    }
+
+
+
 }

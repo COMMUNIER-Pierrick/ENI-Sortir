@@ -18,10 +18,6 @@ Trip:
     path: /trip
     controller: App\Controller\TripController::index
 
-Register:
-    path: /register
-    controller: App\Controller\RegistrationController::register
-
 login:
     path: /login
     controller: App\Controller\SecurityController::login
@@ -29,3 +25,23 @@ login:
 logout:
     path: /logout
     controller: App\Controller\SecurityController::logout
+
+Admin:
+    path: /admin
+    controller: App\Controller\AdminController::index
+
+Admin_register:
+    path: /admin/register
+    controller: App\Controller\RegistrationController::register
+
+Admin_deactivateUser:
+    path: /admin/deactivate
+    controller: App\Controller\AdminController::deactivateUser
+
+Admin_deleteUser:
+    path: /admin/delete
+    controller: App\Controller\AdminController::deleteUser
+
+Admin_cancelTrip:
+    path: /admin/cancel
+    controller: App\Controller\AdminController::cancelTrip

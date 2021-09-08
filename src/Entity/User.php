@@ -8,10 +8,12 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
  * @UniqueEntity(fields={"email"}, message="There is already an account with this email")
+ * @UniqueEntity(fields={"pseudo"}, message="There is already an account with this pseudo")
  */
 class User implements UserInterface
 {
@@ -24,6 +26,7 @@ class User implements UserInterface
 
     /**
      * @ORM\Column(type="string", length=180, unique=true)
+     * @Assert\Email(mode="strict", message = "The email '{{ value }}' is not a valid email.")
      */
     private $email;
 
@@ -44,7 +47,7 @@ class User implements UserInterface
     private $nom;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, unique=true)
      */
     private $pseudo;
 
@@ -54,7 +57,10 @@ class User implements UserInterface
     private $prenom;
 
     /**
-     * @ORM\Column(type="string", length=255, nullable=true)
+     * @ORM\Column(type="string", length=10, nullable=true)
+     * @Assert\Regex(pattern = "^[0-9]+$^",
+     *     match = "true",
+     *     message = "The phone number {{ value }} is not a valid number.")
      */
     private $telephone;
 
