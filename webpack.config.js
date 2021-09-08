@@ -1,7 +1,7 @@
-var Encore = require('@symfony/webpack-encore');
+const Encore = require('@symfony/webpack-encore');
 const PurgeCssPlugin = require('purgecss-webpack-plugin');
 const glob = require('glob-all');
-const path = require('path')
+const path = require('path');
 
 // Manually configure the runtime environment if not already configured yet by the "encore" command.
 // It's useful when you use tools that rely on webpack.config.js file.
@@ -34,7 +34,6 @@ Encore
     // will require an extra script tag for runtime.js
     // but, you probably want this, unless you're building a single-page app
     .enableSingleRuntimeChunk()
-    .enablePostCssLoader()
 
     /*
      * FEATURE CONFIG
@@ -60,7 +59,12 @@ Encore
     })
 
     // enables Sass/SCSS support
-    //.enableSassLoader()
+    .enablePostCssLoader((options) => {
+        // new option outlined here https://webpack.js.org/loaders/postcss-loader/
+        options.postcssOptions = {
+          config: './postcss-config.js',
+        }
+    })
 
     // uncomment if you use TypeScript
     //.enableTypeScriptLoader()
