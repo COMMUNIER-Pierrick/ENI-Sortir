@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
     <head>
         <meta charset="UTF-8">
         <meta name="viewport"
@@ -9,6 +9,33 @@
     </head>
     <body>
     <header>
+        <div>
+            <h1><a href="{{ path('Main') }}" title="Go back to homepage">Sortir.com</a></h1>
+            <nav>
+                <ul>
+                    {% if is_granted("ROLE_ADMIN") %}
+                    <li>
+                        <a href="{{ path('City') }}" title="Go back to citypage">Ville</a>
+                    </li>
+                    <li>
+                        <a href="{{ path('Campus') }}" title="Go back to campuspage">Campus</a>
+                    </li>
+                    <li>
+                        <a href="{{ path('Admin') }}" title="Go back to new administratorpage">Administrateur</a>
+                    </li>
+                    {% endif %}
+                    <li>
+                        <a href="{{ path('Main') }}" title="Go back to homepage">Accueil</a>
+                    </li>
+                    <li>
+                        <a href="{{ path('User') }}" title="Go back to profilpage">Mon profil</a>
+                    </li>
+                    <li>
+                        <a href="{{ path('logout') }}" title="logout">Se déconnecter</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
     </header>
     <main>
         {% block body %}{% endblock %}
