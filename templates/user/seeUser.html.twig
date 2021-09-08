@@ -1,0 +1,19 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello UserController!{% endblock %}
+
+{% block body %}
+<div>
+    <h2>{{ user.nom }}</h2>
+    <div class="bg-black">
+        <ul>
+            <li><span class="text-white">Prénom:</span><span>{{user.prenom}}</span></li>
+            <li><span>Nom:</span><span>{{user.nom}}</span></li>
+            <li><span>Téléphone:</span><span>{{user.telephone}}</span></li>
+            <li><span>Email:</span><span>{{user.email}}</span></li>
+            <li><span>Campus:</span><span>{{user.campus.nom}}</span></li>
+        </ul>
+    </div>
+    <a href="/">Retour</a>
+</div>    
+{% endblock %}

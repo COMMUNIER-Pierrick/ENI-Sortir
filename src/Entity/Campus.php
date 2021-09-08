@@ -34,6 +34,18 @@ class Campus
         $this->users = new ArrayCollection();
     }
 
+    public function getNom(): ?string
+    {
+        return $this->nom;
+    }
+
+    public function setNom(string $nom): self
+    {
+        $this->nom = $nom;
+
+        return $this;
+    }
+
     /**
      * @return Collection|User[]
      */
