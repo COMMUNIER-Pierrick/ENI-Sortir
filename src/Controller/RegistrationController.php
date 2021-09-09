@@ -8,6 +8,7 @@ use App\Entity\Sortie;
 use App\Form\RegistrationFormType;
 use App\Form\UploadFileUserType;
 use App\Security\AppAuthenticator;
+use App\Services\FileUploader;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -58,7 +59,7 @@ class RegistrationController extends AbstractController
         ]);
     }
 
-    public function registerViaFile(Request $request): Response
+    public function registerViaFile(Request $request, FileUploader $fileUploader): Response
     {
         $user = new User();
         $form = $this->createForm(UploadFileUserType::class, $user);
@@ -67,8 +68,16 @@ class RegistrationController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
 
             $file = $form->get('fichier')->getData();
-            var_dump($file);
-           // fgetcsv($file, 0,",",'"','\\');
+
+            if ($file) {
+                $fileName = $fileUploader->upload($file);
+                var_dump($fileName);
+            }
+           // $nameFile = $file->getClientOriginalName();
+            //var_dump($file);
+           // $file = fopen($nameFile,'r');
+           // var_dump($file);
+            //fgetcsv($file, 0,",",'"','\\');
            // var_dump($file);
         }
 
