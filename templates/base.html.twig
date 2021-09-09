@@ -31,7 +31,7 @@
                         <a href="{{ path('Main') }}" title="Go back to homepage">Accueil</a>
                     </li>
                     <li>
-                        <a href="{{ path('User') }}" title="Go back to profilpage">Mon profil</a>
+                        <a href="{{ path('Profil_user', {'id': app.user.id}) }}" title="Go back to profilpage">Mon profil</a>
                     </li>
                     <li>
                         <a href="{{ path('logout') }}" title="logout">Se déconnecter</a>
