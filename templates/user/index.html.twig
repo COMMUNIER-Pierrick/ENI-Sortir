@@ -3,18 +3,25 @@
 {% block title %}Hello UserController!{% endblock %}
 
 {% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
-
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
-
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code><a href="{{ 'C:/wamp64/www/sortir/src/Controller/UserController.php'|file_link(0) }}">src/Controller/UserController.php</a></code></li>
-        <li>Your template at <code><a href="{{ 'C:/wamp64/www/sortir/templates/user/index.html.twig'|file_link(0) }}">templates/user/index.html.twig</a></code></li>
-    </ul>
+<div>
+    <h3>Mon profil</h3>
+    <form method="post" action="">
+        <label for="pseudo">Pseudo:</label><input type="text" id="pseudo">
+        <label for="prenom">Prénom:</label><input type="text" id="prenom">
+        <label for="nom">Nom:</label><input type="text" id="nom">
+        <label for="telephone">Téléphone:</label><input type="tel" id="telephone">
+        <label for="email">Email:</label><input type="text" id="email">
+        <label for="motDePasse">Mot de passe:</label><input type="text" id="motDePasse">
+        <label for="confirmation">Confirmation:</label><input type="text" id="confirmation">
+        <label for="campus">Campus:</label>
+        <select type="text" id="campus">
+            {% for camp in campus %}
+            <option value="{{ camp.id }}">{{ camp.nom }}</option>
+            {% endfor %}
+        </select>
+        <label for="maPhoto">Ma photo:</label><input type="file" id="maPhoto">
+        <input type="submit" value="Enregistrer">
+        <input type="submit" value="Annuler">
+    </form>
 </div>
 {% endblock %}
