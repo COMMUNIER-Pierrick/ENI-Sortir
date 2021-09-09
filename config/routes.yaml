@@ -42,6 +42,10 @@ Admin_register:
     path: /admin/register
     controller: App\Controller\RegistrationController::register
 
+Admin_register_file:
+  path: /admin/registerFile
+  controller: App\Controller\RegistrationController::registerViaFile
+
 Admin_deactivateUser:
     path: /admin/deactivate
     controller: App\Controller\AdminController::deactivateUser

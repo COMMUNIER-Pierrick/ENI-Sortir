@@ -6,12 +6,14 @@ use App\Entity\Etat;
 use App\Entity\User;
 use App\Entity\Sortie;
 use App\Form\RegistrationFormType;
+use App\Form\UploadFileUserType;
 use App\Security\AppAuthenticator;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Security\Guard\GuardAuthenticatorHandler;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class RegistrationController extends AbstractController
 {
@@ -53,6 +55,25 @@ class RegistrationController extends AbstractController
 
         return $this->render('registration/register.html.twig', [
             'registrationForm' => $form->createView(),
+        ]);
+    }
+
+    public function registerViaFile(Request $request): Response
+    {
+        $user = new User();
+        $form = $this->createForm(UploadFileUserType::class, $user);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+
+            $file = $form->get('fichier')->getData();
+            var_dump($file);
+           // fgetcsv($file, 0,",",'"','\\');
+           // var_dump($file);
+        }
+
+        return $this->render('services/uploadFileUser.html.twig', [
+            'UploadFileUserForm' => $form->createView(),
         ]);
     }
 }
