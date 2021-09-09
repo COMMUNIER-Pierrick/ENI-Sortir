@@ -5,23 +5,15 @@
 {% block body %}
 <div>
     <h3>Mon profil</h3>
-    <form method="post" action="">
-        <label for="pseudo">Pseudo:</label><input type="text" id="pseudo">
-        <label for="prenom">Prénom:</label><input type="text" id="prenom">
-        <label for="nom">Nom:</label><input type="text" id="nom">
-        <label for="telephone">Téléphone:</label><input type="tel" id="telephone">
-        <label for="email">Email:</label><input type="text" id="email">
-        <label for="motDePasse">Mot de passe:</label><input type="text" id="motDePasse">
-        <label for="confirmation">Confirmation:</label><input type="text" id="confirmation">
-        <label for="campus">Campus:</label>
-        <select type="text" id="campus">
-            {% for camp in campus %}
-            <option value="{{ camp.id }}">{{ camp.nom }}</option>
-            {% endfor %}
-        </select>
-        <label for="maPhoto">Ma photo:</label><input type="file" id="maPhoto">
-        <input type="submit" value="Enregistrer">
-        <input type="submit" value="Annuler">
-    </form>
+    <div>
+        <ul>
+            <li><span>Prénom:</span><span>{{user.prenom}}</span></li>
+            <li><span>Nom:</span><span>{{user.nom}}</span></li>
+            <li><span>Téléphone:</span><span>{{user.telephone}}</span></li>
+            <li><span>Email:</span><span>{{user.email}}</span></li>
+            <li><span>Campus:</span><span>{{user.campus.nom}}</span></li>
+        </ul>
+    </div>
+    <a href="/profil/update">Modifier</a>  
 </div>
 {% endblock %}
