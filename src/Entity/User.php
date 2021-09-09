@@ -86,7 +86,7 @@ class User implements UserInterface
     private $sortieOrganisees;
 
     /**
-     * @ORM\ManyToMany(targetEntity=Sortie::class, inversedBy="users")
+     * @ORM\ManyToMany(targetEntity=Sortie::class, inversedBy="users", cascade={"persist"})
      */
     private $sorties;
 

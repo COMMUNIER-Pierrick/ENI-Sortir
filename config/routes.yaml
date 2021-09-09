@@ -2,6 +2,14 @@ Main:
   path: /
   controller: App\Controller\MainController::index
 
+Main_create:
+  path: /create
+  controller: App\Controller\MainController::create
+
+Main_display:
+  path: /display/{id}
+  controller: App\Controller\MainController::display
+
 City:
   path: /city
   controller: App\Controller\CityController::index
@@ -17,10 +25,6 @@ Profil_user:
 User:
   path: /profil
   controller: App\Controller\UserController::index
-
-Trip:
-  path: /trip
-  controller: App\Controller\TripController::index
 
 login:
     path: /login

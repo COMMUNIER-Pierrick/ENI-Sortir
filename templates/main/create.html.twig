@@ -1,0 +1,40 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+
+{% endblock %}
+
+{% block body %}
+    <h2>Créer une sortie</h2>
+    <div>
+        {{ form_start(sortieForm) }}
+        {# {{ form_widget(sortieForm) }} #}
+
+        <div class="group">
+            {{ form_row(sortieForm.nom) }}
+            {{ form_row(sortieForm.dateHeureDebut) }}
+            {{ form_row(sortieForm.dateLimiteInscription) }}
+            {{ form_row(sortieForm.nbInscriptionsMax) }}
+            {{ form_row(sortieForm.duree) }}
+            {{ form_row(sortieForm.infosSortie) }}
+        </div>
+        <br>
+        <br>
+
+        <div class="group">
+            {{ form_row(sortieForm.campus) }}
+            {{ form_row(sortieForm.lieu) }}
+        </div>
+        <br>
+        <br>
+
+
+        <button>Enregister</button>
+
+        {{ form_end(sortieForm) }}
+        <br>
+        <br>
+    </div>
+
+{% endblock %}
+
