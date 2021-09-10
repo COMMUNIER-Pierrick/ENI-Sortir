@@ -34,6 +34,25 @@ class Campus
         $this->users = new ArrayCollection();
     }
 
+
+    public function getId(): ?int
+    {
+        return $this->id;
+    }
+
+    public function getNom(): ?string
+    {
+        return $this->nom;
+    }
+
+    public function setNom(string $nom): self
+    {
+        $this->nom = $nom;
+
+        return $this;
+    }
+
+
     /**
      * @return Collection|User[]
      */
@@ -64,8 +83,4 @@ class Campus
         return $this;
     }
 
-    public function getId(): ?int
-    {
-        return $this->id;
-    }
 }

@@ -10,6 +10,10 @@ Main_display:
   path: /display/{id}
   controller: App\Controller\MainController::display
 
+Main_modify:
+  path: /modify/{id}
+  controller: App\Controller\MainController::modify
+
 City:
   path: /city
   controller: App\Controller\CityController::index
