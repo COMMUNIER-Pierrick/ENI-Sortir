@@ -2,19 +2,19 @@
 
 namespace App\Controller;
 
-use App\Entity\Etat;
 use App\Entity\User;
-use App\Entity\Sortie;
 use App\Form\RegistrationFormType;
 use App\Form\UploadFileUserType;
 use App\Security\AppAuthenticator;
 use App\Services\FileUploader;
+use Doctrine\ORM\EntityManagerInterface;
+use ErrorException;
+use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Security\Guard\GuardAuthenticatorHandler;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class RegistrationController extends AbstractController
 {
@@ -59,10 +59,9 @@ class RegistrationController extends AbstractController
         ]);
     }
 
-    public function registerViaFile(Request $request, FileUploader $fileUploader): Response
+    public function registerViaFile(Request $request, FileUploader $fileUploader, UserPasswordEncoderInterface $passwordEncoder,EntityManagerInterface $entityManager): Response
     {
-        $user = new User();
-        $form = $this->createForm(UploadFileUserType::class, $user);
+        $form = $this->createForm(UploadFileUserType::class);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -71,16 +70,47 @@ class RegistrationController extends AbstractController
 
             if ($file) {
                 $fileName = $fileUploader->upload($file);
-                var_dump($fileName);
+                $handleFile = file("../public/uploads/fileUser/" . $fileName);
+                foreach ($handleFile as $key => $value) {
+                    $newHandleFile[] = explode(',', $value);
+                }
+                foreach ($newHandleFile as $key => $value) {
+                    if ($key > 0 && is_array($value)) {
+                        $user = new User();
+                        foreach ($value as $keys => $values) {
+                            switch ($keys){
+                                case 0: $user->setNom($values);
+                                        break;
+                                case 1: $user->setPrenom($values);
+                                        break;
+                                case 2: $user->setPseudo($values);
+                                        break;
+                                case 3: $user->setEmail($values);
+                                        break;
+                                case 4: $user->setPassword($passwordEncoder->encodePassword(
+                                    $user,$values));
+                                        break;
+                            }
+                            $userFailed = $key + 1;
+                            $user->setRoles(["ROLE_USER"]);
+                            $user->setAdministrateur(false);
+                            $user->setActif(true);
+                            if($keys == 4){
+                                try {
+                                    $entityManager->persist($user);
+                                    $entityManager->flush();
+                                }catch (Exception $e){
+                                    throw new ErrorException("l'inscription de l'utilisateur a la ligne n° ".$userFailed." du fichier à échouer.
+                                    Des données sont similaires à celles d'un utilisateur déjà existant.
+                                    Veuillez modifier les champs email/pseudo correspondant.
+                                    N'oubliez pas de supprimer les entrées des utilisateur sur le fichier au desssus de l'utilisateur causant cette erreur.");
+                                }
+                            }
+                        }
+                    }
+                }
             }
-           // $nameFile = $file->getClientOriginalName();
-            //var_dump($file);
-           // $file = fopen($nameFile,'r');
-           // var_dump($file);
-            //fgetcsv($file, 0,",",'"','\\');
-           // var_dump($file);
         }
-
         return $this->render('services/uploadFileUser.html.twig', [
             'UploadFileUserForm' => $form->createView(),
         ]);
