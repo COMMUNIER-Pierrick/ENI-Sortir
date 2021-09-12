@@ -15,7 +15,7 @@
     {{ form_row(form.campus) }}
     {{ form_label(form.picture) }}
     {{ form_errors(form.picture) }}
-    {{ form_widget(form.picture, {'attr': {'class': 'image'}}) }}
+    {{ form_widget(form.picture, {'attr': {'class': 'image', 'accept': ".png,.jpg,.jpeg"}}) }}
     {{ form_help(form.picture) }}
 
     {{ form_end(form) }}
