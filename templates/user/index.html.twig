@@ -7,6 +7,7 @@
     <h3>Mon profil</h3>
     <div>
         <ul>
+            <li><span>Pseudo:</span><span>{{user.pseudo}}</span></li>
             <li><span>Prénom:</span><span>{{user.prenom}}</span></li>
             <li><span>Nom:</span><span>{{user.nom}}</span></li>
             <li><span>Téléphone:</span><span>{{user.telephone}}</span></li>
@@ -14,6 +15,9 @@
             <li><span>Campus:</span><span>{{user.campus.nom}}</span></li>
         </ul>
     </div>
-    <a href="/profil/update">Modifier</a>  
+    {% if user.picture.image %}
+    <img src="/uploads/{{ user.picture.image }}" alt="" width="64" height="64">
+    {% endif %}
+    <a href="/profil/check">Modifier</a>  
 </div>
 {% endblock %}

@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Picture;
 use App\Entity\User;
 use App\Form\RegistrationFormType;
 use App\Form\UploadFileUserType;
@@ -39,7 +40,21 @@ class RegistrationController extends AbstractController
             } else {
                 $user->setRoles(["ROLE_USER"]);
             }
+            $picture = $form->get('picture')->getData();
+            if ($picture) {
+                $fichier = md5(uniqid()) . '.' . $picture->guessExtension();
 
+                $picture->move(
+                    $this->getParameter('pictures_directory'),
+                    $fichier
+                );
+            } else {
+                $fichier = 'default-picture.png';
+            }
+
+            $pic = new Picture();
+            $pic->setImage($fichier);
+            $user->setPicture($pic);
 
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($user);
@@ -59,7 +74,7 @@ class RegistrationController extends AbstractController
         ]);
     }
 
-    public function registerViaFile(Request $request, FileUploader $fileUploader, UserPasswordEncoderInterface $passwordEncoder,EntityManagerInterface $entityManager): Response
+    public function registerViaFile(Request $request, FileUploader $fileUploader, UserPasswordEncoderInterface $passwordEncoder, EntityManagerInterface $entityManager): Response
     {
         $form = $this->createForm(UploadFileUserType::class);
         $form->handleRequest($request);
@@ -78,29 +93,36 @@ class RegistrationController extends AbstractController
                     if ($key > 0 && is_array($value)) {
                         $user = new User();
                         foreach ($value as $keys => $values) {
-                            switch ($keys){
-                                case 0: $user->setNom($values);
-                                        break;
-                                case 1: $user->setPrenom($values);
-                                        break;
-                                case 2: $user->setPseudo($values);
-                                        break;
-                                case 3: $user->setEmail($values);
-                                        break;
-                                case 4: $user->setPassword($passwordEncoder->encodePassword(
-                                    $user,$values));
-                                        break;
+                            switch ($keys) {
+                                case 0:
+                                    $user->setNom($values);
+                                    break;
+                                case 1:
+                                    $user->setPrenom($values);
+                                    break;
+                                case 2:
+                                    $user->setPseudo($values);
+                                    break;
+                                case 3:
+                                    $user->setEmail($values);
+                                    break;
+                                case 4:
+                                    $user->setPassword($passwordEncoder->encodePassword(
+                                        $user,
+                                        $values
+                                    ));
+                                    break;
                             }
                             $userFailed = $key + 1;
                             $user->setRoles(["ROLE_USER"]);
                             $user->setAdministrateur(false);
                             $user->setActif(true);
-                            if($keys == 4){
+                            if ($keys == 4) {
                                 try {
                                     $entityManager->persist($user);
                                     $entityManager->flush();
-                                }catch (Exception $e){
-                                    throw new ErrorException("l'inscription de l'utilisateur a la ligne n° ".$userFailed." du fichier à échouer.
+                                } catch (Exception $e) {
+                                    throw new ErrorException("l'inscription de l'utilisateur a la ligne n° " . $userFailed . " du fichier à échouer.
                                     Des données sont similaires à celles d'un utilisateur déjà existant.
                                     Veuillez modifier les champs email/pseudo correspondant.
                                     N'oubliez pas de supprimer les entrées des utilisateur sur le fichier au desssus de l'utilisateur causant cette erreur.");

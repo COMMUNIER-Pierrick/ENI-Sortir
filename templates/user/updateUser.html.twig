@@ -6,7 +6,42 @@
 <div>
     <h3>Mon profil</h3>
 
-    {{ form(form) }}
+    {{ form_start(form) }}
+
+    {{ form_row(form.pseudo) }}
+    {{ form_row(form.prenom) }}
+    {{ form_row(form.nom) }}
+    {{ form_row(form.telephone) }}
+    {{ form_row(form.campus) }}
+    {{ form_label(form.picture) }}
+    {{ form_errors(form.picture) }}
+    {{ form_widget(form.picture, {'attr': {'class': 'image'}}) }}
+    {{ form_help(form.picture) }}
+
+    {{ form_end(form) }}
+
+    <img id="showImg" height="64" src="/uploads/{{ user.picture.image }}" alt="">
 
 </div>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script>
+  function readURL(input) {
+
+      if (input.files && input.files[0]) {
+        var reader = new FileReader();
+
+        reader.onload = function (e) {
+          $('#showImg').attr('src', e.target.result);
+        }
+
+        reader.readAsDataURL(input.files[0]);
+      }
+    }
+    $(document).ready(function () {
+
+      $(".image").change(function () {
+        readURL(this);
+      });
+    });
+  </script>
 {% endblock %}
