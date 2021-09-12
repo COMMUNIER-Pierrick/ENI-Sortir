@@ -10,11 +10,16 @@ use App\Form\PasswordCheckType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 class UserController extends AbstractController
 {
+    public function __construct(SessionInterface $session)
+    {
+        $this->session = $session;
+    }
 
     public function index(): Response
     {
@@ -53,8 +58,10 @@ class UserController extends AbstractController
             // Si le mot de passe est bon
             if ($passwordEncoder->isPasswordValid($user, $form->getData()->getPassword())) {
 
-                //Renvoie vers updateUser [params: mot de passe]
-                return $this->redirectToRoute('Update_user', ['password' => $form->getData()->getPassword()]);
+                $this->session->set('update', true);
+
+                //Renvoie vers updateUser
+                return $this->redirectToRoute('Update_user');
             }
         }
 
@@ -98,7 +105,8 @@ class UserController extends AbstractController
         }
 
         // Si le mot de passe est bon
-        if ($request->query->has('password') && $passwordEncoder->isPasswordValid($user, $request->query->get('password'))) {
+        if ($user && $this->session->get('update')) {
+            $this->session->set('update', false);
 
             return $this->render('user/updateUser.html.twig', [
                 'controller_name' => 'UserController',
