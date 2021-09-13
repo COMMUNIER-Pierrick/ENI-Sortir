@@ -1,0 +1,6 @@
+nom,prenom,pseudo,email,password
+dupont,alex,alex27,alex@gmail.com,alex27
+durant,mathieu,mathieu27,mathieu@gmail.com,mathieu27
+dupuis,julie,julie27,julie@gmail.com,julie27
+linais,christophe,christophe27,christophe@gmail.com,christophe27
+martel,axelle,axelle27,axelle@gmail.com,axelle27
