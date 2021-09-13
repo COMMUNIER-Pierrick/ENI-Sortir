@@ -9,4 +9,26 @@
         {{ form_widget(registrationForm) }}
         <button type="submit" class="btn">Valider</button>
     {{ form_end(registrationForm) }}
+    <img id="showImg" height="64" src="" alt="">
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script>
+  function readURL(input) {
+
+      if (input.files && input.files[0]) {
+        var reader = new FileReader();
+
+        reader.onload = function (e) {
+          $('#showImg').attr('src', e.target.result);
+        }
+
+        reader.readAsDataURL(input.files[0]);
+      }
+    }
+    $(document).ready(function () {
+
+      $(".image").change(function () {
+        readURL(this);
+      });
+    });
+  </script>
 {% endblock %}

@@ -55,6 +55,7 @@ class RegistrationFormType extends AbstractType
                 'label' => false,
                 'mapped' => false,
                 'required' => false,
+                'attr' => ['class' => 'image', 'accept' => ".png,.jpg,.jpeg"],
             ])
             ->add('administrateur')
             ->add('actif');
