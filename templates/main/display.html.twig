@@ -28,5 +28,11 @@
     </div>
     <br>
 
+    {% if inscription %}
+        <a href="?inscription=false"> Se désister </a>
+    {% else %}
+        <a href="?inscription=true"> S'inscrire </a>
+    {% endif %}
+
 {% endblock %}
 

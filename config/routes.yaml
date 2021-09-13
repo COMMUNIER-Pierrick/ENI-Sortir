@@ -26,6 +26,10 @@ Profil_user:
   path: /profil/{id<\d+>}
   controller: App\Controller\UserController::seeUser
 
+Check_password:
+  path: /profil/check
+  controller: App\Controller\UserController::checkPassword
+
 Update_user:
   path: /profil/update
   controller: App\Controller\UserController::updateUser
@@ -65,5 +69,13 @@ Admin_deleteUser:
 Admin_cancelTrip:
     path: /admin/cancel
     controller: App\Controller\AdminController::cancelTrip
+
+Admin_villes:
+    path: /admin/villes
+    controller: App\Controller\VilleController::index
+
+Admin_ville_update:
+    path: /admin/villes/{id<\d+>}
+    controller: App\Controller\VilleController::update
 
 

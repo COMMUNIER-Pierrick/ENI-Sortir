@@ -2,16 +2,19 @@
 
 namespace App\Form;
 
-use App\Entity\Campus;
 use App\Entity\User;
-use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use App\Entity\Campus;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\PasswordType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\All;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use Symfony\Component\Validator\Constraints\File;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 
 class RegistrationFormType extends AbstractType
 {
@@ -22,7 +25,7 @@ class RegistrationFormType extends AbstractType
             ->add('nom', TextType::class)
             ->add('prenom', TextType::class)
             ->add('pseudo', TextType::class)
-            ->add('telephone', TextType::class,[
+            ->add('telephone', TextType::class, [
                 'required' => false,
             ])
             ->add('campus', EntityType::class, [
@@ -48,9 +51,14 @@ class RegistrationFormType extends AbstractType
                     ]),
                 ],
             ])
+            ->add('picture', FileType::class, [
+                'label' => false,
+                'mapped' => false,
+                'required' => false,
+                'attr' => ['class' => 'image', 'accept' => ".png,.jpg,.jpeg"],
+            ])
             ->add('administrateur')
-            ->add('actif')
-        ;
+            ->add('actif');
     }
 
     public function configureOptions(OptionsResolver $resolver)

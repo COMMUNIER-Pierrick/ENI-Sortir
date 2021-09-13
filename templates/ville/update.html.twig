@@ -1,0 +1,15 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello VilleController!{% endblock %}
+
+{% block body %}
+<div>
+    {{ form_start(form) }}
+    {{ form_row(form.nom) }}
+    {{ form_row(form.codePostal) }}
+    <input type="submit">
+    {{ form_end(form) }}
+
+    <a href="/admin/villes">Retour</a>
+</div>
+{% endblock %}

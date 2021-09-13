@@ -21,27 +21,42 @@ class MainController extends AbstractController
     }
 
 
-    public function display(int $id, SortieRepository $sortieRepository): Response
+    public function display(int $id, SortieRepository $sortieRepository, Request $request): Response
     {
-        $sortie=$sortieRepository->find($id);
+        $sortie = $sortieRepository->find($id);
+        $user = $this->getUser();
+
+        if ($request->query->has('inscription')) {
+            if ($request->query->get('inscription') == 'true') {
+                $sortie->addUser($user);
+            } else {
+                $sortie->removeUser($user);
+            }
+        }
+
+        $inscription = false;
+        if (in_array($user, $sortie->getUsers()->toArray(), true)) {
+            $inscription = true;
+        }
 
         return $this->render('main/display.html.twig', [
-            'sortie'=>$sortie
+            'sortie' => $sortie,
+            'inscription' => $inscription,
         ]);
     }
 
 
 
-    public function create(Request $request,
-                           EntityManagerInterface $entityManager,
-                           UserRepository $userRepository,
-                           EtatRepository $etatRepository
-    ): Response
-    {
+    public function create(
+        Request $request,
+        EntityManagerInterface $entityManager,
+        UserRepository $userRepository,
+        EtatRepository $etatRepository
+    ): Response {
 
         $user = $userRepository->findOneBy(
             [
-                "email"=>$this->getUser()->getUsername()
+                "email" => $this->getUser()->getUsername()
             ]
         );
 
@@ -81,9 +96,10 @@ class MainController extends AbstractController
 
 
         return $this->render('main/create.html.twig', [
-            'sortieForm'=>$sortieForm->createView()
+            'sortieForm' => $sortieForm->createView()
         ]);
     }
+<<<<<<< HEAD
 
 
     public function modify(Sortie $sortie,
@@ -130,4 +146,6 @@ class MainController extends AbstractController
         ]);
     }
 
+=======
+>>>>>>> 48eec3c (dynamic display img on register)
 }

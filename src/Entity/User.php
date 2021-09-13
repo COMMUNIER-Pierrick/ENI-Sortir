@@ -90,6 +90,11 @@ class User implements UserInterface
      */
     private $sorties;
 
+    /**
+     * @ORM\OneToOne(targetEntity=Picture::class, mappedBy="user", cascade={"persist", "remove"})
+     */
+    private $picture;
+
     public function __construct()
     {
         $this->sortieOrganisees = new ArrayCollection();
@@ -98,6 +103,13 @@ class User implements UserInterface
 
     public function getId(): ?int
     {
+        return $this->id;
+    }
+
+    public function setId($id): ?int
+    {
+        $this->id = $id;
+
         return $this->id;
     }
 
@@ -307,6 +319,23 @@ class User implements UserInterface
     public function removeSorty(Sortie $sorty): self
     {
         $this->sorties->removeElement($sorty);
+
+        return $this;
+    }
+
+    public function getPicture(): ?Picture
+    {
+        return $this->picture;
+    }
+
+    public function setPicture(Picture $picture): self
+    {
+        // set the owning side of the relation if necessary
+        if ($picture->getUser() !== $this) {
+            $picture->setUser($this);
+        }
+
+        $this->picture = $picture;
 
         return $this;
     }
