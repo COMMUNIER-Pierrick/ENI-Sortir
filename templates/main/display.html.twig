@@ -48,10 +48,14 @@
     {% endif %}
     <br>
 
-    {% if inscription %}
-        <a href="?inscription=false"> Se désister </a>
+    {% if sortie.etat == 1%}
+        {% if inscription %}
+            <a href="?inscription=false"> Se désister </a>
+        {% else %}
+            <a href="?inscription=true"> S'inscrire </a>
+        {% endif %}
     {% else %}
-        <a href="?inscription=true"> S'inscrire </a>
+        <p>Vous ne pouvez pas vous inscrire à cette sortie.</p>
     {% endif %}
 
 {% endblock %}

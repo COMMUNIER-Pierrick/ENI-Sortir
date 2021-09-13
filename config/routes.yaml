@@ -26,6 +26,10 @@ Profil_user:
   path: /profil/{id<\d+>}
   controller: App\Controller\UserController::seeUser
 
+All_users:
+  path: /admin/users
+  controller: App\Controller\UserController::allUsers
+
 Check_password:
   path: /profil/check
   controller: App\Controller\UserController::checkPassword
@@ -33,6 +37,18 @@ Check_password:
 Update_user:
   path: /profil/update
   controller: App\Controller\UserController::updateUser
+
+Delete_user:
+  path: /admin/users/delete/{id<\d+>}
+  controller: App\Controller\UserController::deleteUser
+
+Activate_user:
+  path: /admin/users/activate/{id<\d+>}
+  controller: App\Controller\UserController::activateUser
+
+Desactivate_user:
+  path: /admin/users/desactivate/{id<\d+>}
+  controller: App\Controller\UserController::desactivateUser
 
 User:
   path: /profil

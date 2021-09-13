@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello UserController!{% endblock %}
+
+{% block body %}
+<div>
+    <table>
+        <thead>
+            <tr>
+                <td>Id</td>
+                <td>Email</td>
+                <td>Pseudo</td>
+                <td>Admin</td>
+                <td>Actif</td>
+            </tr>
+        </thead>
+        <tbody>
+        {% for user in users %}
+            <tr>
+                <td>{{ user.id }}</td>
+                <td>{{ user.email }}</td>
+                <td>{{ user.pseudo }}</td>
+                <td>{% if user.administrateur %} True {% else %} False {% endif %}</td>
+                <td>{{ user.actif }}</td>
+                <td> <a href="/profil/{{ user.id }}">Voir le profil</a> </td>
+                <td> <a href="/admin/users/delete/{{ user.id }}">Supprimer</a> </td>
+                <td> 
+                {% if user.actif == 1 %}
+                    <a href="/admin/users/desactivate/{{ user.id }}">Desactiver</a> 
+                {% else %}
+                    <a href="/admin/users/activate/{{ user.id }}">Activer</a> 
+                {% endif %}
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>    
+{% endblock %}
