@@ -42,7 +42,7 @@ class MainController extends AbstractController
     ): Response {
         $sortie = $sortieRepository->find($id);
         $user = $this->getUser();
-        $entityManager = $this->getDoctrine()->getManager();
+
 
         if ($request->query->has('inscription')) {
             if ($request->query->get('inscription') == 'true') {
