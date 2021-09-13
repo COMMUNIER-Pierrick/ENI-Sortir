@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Campus;
 use App\Entity\Picture;
 use App\Entity\User;
 use App\Form\RegistrationFormType;
@@ -107,6 +108,7 @@ class RegistrationController extends AbstractController
                                     $user->setEmail($values);
                                     break;
                                 case 4:
+                                    $values = preg_replace("/\s+/", "", $values);
                                     $user->setPassword($passwordEncoder->encodePassword(
                                         $user,
                                         $values
@@ -117,24 +119,31 @@ class RegistrationController extends AbstractController
                             $user->setRoles(["ROLE_USER"]);
                             $user->setAdministrateur(false);
                             $user->setActif(true);
+                            $error = "l'inscription de l'utilisateur a la ligne n° " . $userFailed . " du fichier à échouer.
+                                    \nDes données sont similaires à celles d'un utilisateur déjà existant.
+                                    \nVeuillez modifier les champs email/pseudo correspondant.
+                                    \nN'oubliez pas de supprimer les entrées des utilisateur sur le fichier au desssus de l'utilisateur causant cette erreur.";
                             if ($keys == 4) {
                                 try {
                                     $entityManager->persist($user);
                                     $entityManager->flush();
                                 } catch (Exception $e) {
-                                    throw new ErrorException("l'inscription de l'utilisateur a la ligne n° " . $userFailed . " du fichier à échouer.
-                                    Des données sont similaires à celles d'un utilisateur déjà existant.
-                                    Veuillez modifier les champs email/pseudo correspondant.
-                                    N'oubliez pas de supprimer les entrées des utilisateur sur le fichier au desssus de l'utilisateur causant cette erreur.");
+                                    throw new ErrorException();
+                                } finally {
+                                    return $this->render('bundles/TwigBundle/Exception/error500.html.twig', [
+                                        'error' => $error,
+                                    ]);
                                 }
                             }
                         }
                     }
                 }
+                $this->addFlash('success', 'les inscriptions sont faites !');
             }
         }
         return $this->render('services/uploadFileUser.html.twig', [
             'UploadFileUserForm' => $form->createView(),
+            'error' => $error,
         ]);
     }
 }

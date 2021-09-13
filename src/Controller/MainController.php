@@ -43,7 +43,6 @@ class MainController extends AbstractController
         $sortie = $sortieRepository->find($id);
         $user = $this->getUser();
 
-
         if ($request->query->has('inscription')) {
             if ($request->query->get('inscription') == 'true') {
                 $sortie->addUser($user);
@@ -120,8 +119,6 @@ class MainController extends AbstractController
         ]);
     }
 
-
-
     public function modify(Sortie $sortie,
                            Request $request,
                            EntityManagerInterface $entityManager,
@@ -165,6 +162,4 @@ class MainController extends AbstractController
             'sortieForm'=>$sortieForm->createView()
         ]);
     }
-
-
 }

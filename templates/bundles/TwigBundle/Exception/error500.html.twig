@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+   <h2>Oooops erreur 500</h2>
+   {% if error %}
+   <p>{{ error|nl2br }}</p>
+   {% endif %}
+
+{% endblock %}
+
+{% block title %}Erreur 500{% endblock %}
