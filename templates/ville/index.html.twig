@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello VilleController!{% endblock %}
+
+{% block body %}
+<div>
+    <table>
+        <thead>
+            <tr>
+                <td>Ville</td>
+                <td>Code Postal</td>
+                <td>Actions</td>
+            </tr>
+        </thead>
+        <tbody>
+            {% for ville in villes %}
+                <tr>
+                    <td>{{ ville.nom }}</td>
+                    <td>{{ ville.codePostal }}</td>
+                    <td><a href="/admin/villes/{{ville.id}}">Modifier</a> - <a href="?delete={{ville.id}}">Supprimer</a></td>
+                </tr>
+            {% endfor %}
+            <tr>
+                {{ form_start(form) }}
+                <td>    
+                {{ form_errors(form.nom) }}
+                {{ form_widget(form.nom) }}
+                {{ form_help(form.nom) }} 
+                </td>
+                <td> 
+                {{ form_errors(form.codePostal) }}
+                {{ form_widget(form.codePostal) }}
+                {{ form_help(form.codePostal) }}  
+                </td>
+                <td> <input type="submit"> </td>
+                {{ form_end(form) }}
+            </tr>
+        </tbody>
+    </table>
+</div>
+{% endblock %}

@@ -70,4 +70,12 @@ Admin_cancelTrip:
     path: /admin/cancel
     controller: App\Controller\AdminController::cancelTrip
 
+Admin_villes:
+    path: /admin/villes
+    controller: App\Controller\VilleController::index
+
+Admin_ville_update:
+    path: /admin/villes/{id<\d+>}
+    controller: App\Controller\VilleController::update
+
 
