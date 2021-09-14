@@ -24,24 +24,25 @@ class MainController extends AbstractController
             ]
         );
 
-        $sorties = $sortieRepository ->findAll();
+        $sorties = $sortieRepository->findAll();
 
 
-        return $this->render('main/index.html.twig',[
+        return $this->render('main/index.html.twig', [
             "sorties" => $sorties,
-            "utilisateur"=>$user
+            "utilisateur" => $user
         ]);
-
     }
 
 
-    public function display(int $id,
-                            SortieRepository $sortieRepository,
-                            EntityManagerInterface $entityManager,
-                            Request $request): Response
-    {
+    public function display(
+        int $id,
+        SortieRepository $sortieRepository,
+        EntityManagerInterface $entityManager,
+        Request $request
+    ): Response {
         $sortie = $sortieRepository->find($id);
         $user = $this->getUser();
+
 
         if ($request->query->has('inscription')) {
             if ($request->query->get('inscription') == 'true') {
@@ -87,17 +88,17 @@ class MainController extends AbstractController
 
         $sortieForm->handleRequest($request);
 
-        if($sortieForm->isSubmitted()&& $sortieForm->isValid()){
+        if ($sortieForm->isSubmitted() && $sortieForm->isValid()) {
 
             if ($sortieForm->getClickedButton() && 'cansel' === $sortieForm->getClickedButton()->getName()) {
                 return $this->redirectToRoute('Main');
-            }else{
+            } else {
 
                 if ($sortieForm->getClickedButton() && 'publish' === $sortieForm->getClickedButton()->getName()) {
                     $etat = $etatRepository->findAll()[1];
                     $sortie->setEtatSortie($etat);
                     $this->addFlash('success', 'Your trip is open to inscriptions!');
-                }else{
+                } else {
                     $etat = $etatRepository->findAll()[0];
                     $sortie->setEtatSortie($etat);
                     $this->addFlash('success', 'Your trip data has been saved!');
@@ -107,10 +108,8 @@ class MainController extends AbstractController
                 $entityManager->flush();
 
 
-                return $this->redirectToRoute('Main_display', ['id'=>$sortie->getId()]);
-
+                return $this->redirectToRoute('Main_display', ['id' => $sortie->getId()]);
             }
-
         }
 
 
@@ -119,29 +118,29 @@ class MainController extends AbstractController
         ]);
     }
 
-    public function modify(Sortie $sortie,
-                           Request $request,
-                           EntityManagerInterface $entityManager,
-                           EtatRepository $etatRepository
-    ): Response
-    {
+    public function modify(
+        Sortie $sortie,
+        Request $request,
+        EntityManagerInterface $entityManager,
+        EtatRepository $etatRepository
+    ): Response {
 
 
         $sortieForm = $this->createForm(TripType::class, $sortie);
 
         $sortieForm->handleRequest($request);
 
-        if($sortieForm->isSubmitted()&& $sortieForm->isValid()){
+        if ($sortieForm->isSubmitted() && $sortieForm->isValid()) {
 
             if ($sortieForm->getClickedButton() && 'cansel' === $sortieForm->getClickedButton()->getName()) {
                 return $this->redirectToRoute('Main');
-            }else{
+            } else {
 
                 if ($sortieForm->getClickedButton() && 'publish' === $sortieForm->getClickedButton()->getName()) {
                     $etat = $etatRepository->findAll()[1];
                     $sortie->setEtatSortie($etat);
                     $this->addFlash('success', 'Your trip is now open to inscriptions!');
-                }else{
+                } else {
                     $etat = $etatRepository->findAll()[0];
                     $sortie->setEtatSortie($etat);
                     $this->addFlash('success', 'Your trip data has been updated!');
@@ -151,15 +150,13 @@ class MainController extends AbstractController
                 $entityManager->flush();
 
 
-                return $this->redirectToRoute('Main_display', ['id'=>$sortie->getId()]);
-
+                return $this->redirectToRoute('Main_display', ['id' => $sortie->getId()]);
             }
-
         }
 
 
         return $this->render('main/modify.html.twig', [
-            'sortieForm'=>$sortieForm->createView()
+            'sortieForm' => $sortieForm->createView()
         ]);
     }
 }

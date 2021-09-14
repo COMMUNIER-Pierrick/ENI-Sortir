@@ -31,6 +31,48 @@ class UserController extends AbstractController
         ]);
     }
 
+    public function allUsers(): Response
+    {
+        $users = $this->getDoctrine()->getRepository(User::class)->findAll();
+
+        return $this->render('user/allUsers.html.twig', [
+            'controller_name' => 'UserController',
+            'users' => $users,
+        ]);
+    }
+
+    public function deleteUser(Request $request)
+    {
+        $user = $this->getDoctrine()->getRepository(User::class)->find($request->attributes->get('id'));
+        $entityManager = $this->getDoctrine()->getManager();
+        $entityManager->remove($user);
+        $entityManager->flush();
+
+        return $this->redirectToRoute('All_users');
+    }
+
+    public function activateUser(Request $request)
+    {
+        $user = $this->getDoctrine()->getRepository(User::class)->find($request->attributes->get('id'));
+        $entityManager = $this->getDoctrine()->getManager();
+        $user->setActif(1);
+        $entityManager->persist($user);
+        $entityManager->flush();
+
+        return $this->redirectToRoute('All_users');
+    }
+
+    public function desactivateUser(Request $request)
+    {
+        $user = $this->getDoctrine()->getRepository(User::class)->find($request->attributes->get('id'));
+        $entityManager = $this->getDoctrine()->getManager();
+        $user->setActif(0);
+        $entityManager->persist($user);
+        $entityManager->flush();
+
+        return $this->redirectToRoute('All_users');
+    }
+
     public function seeUser(Request $request): Response
     {
         $id = $request->attributes->get('id');
