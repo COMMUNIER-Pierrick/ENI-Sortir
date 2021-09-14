@@ -24,6 +24,7 @@ class Campus
      */
     private $nom;
 
+
     /**
      * @ORM\OneToMany(targetEntity=User::class, mappedBy="campus")
      */
@@ -79,4 +80,5 @@ class Campus
         $this->nom = $nom;
         return $this->nom;
     }
+
 }

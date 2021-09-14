@@ -15,16 +15,34 @@ use Symfony\Component\HttpFoundation\Response;
 class MainController extends AbstractController
 {
 
-    public function index(): Response
+    public function index(SortieRepository $sortieRepository, UserRepository $userRepository): Response
     {
-        return $this->render('main/index.html.twig');
+
+        $user = $userRepository->findOneBy(
+            [
+                "email" => $this->getUser()->getUsername()
+            ]
+        );
+
+        $sorties = $sortieRepository ->findAll();
+
+
+        return $this->render('main/index.html.twig',[
+            "sorties" => $sorties,
+            "utilisateur"=>$user
+        ]);
+
     }
 
 
-    public function display(int $id, SortieRepository $sortieRepository, Request $request): Response
+    public function display(int $id,
+                            SortieRepository $sortieRepository,
+                            EntityManagerInterface $entityManager,
+                            Request $request): Response
     {
         $sortie = $sortieRepository->find($id);
         $user = $this->getUser();
+
 
         if ($request->query->has('inscription')) {
             if ($request->query->get('inscription') == 'true') {
@@ -38,6 +56,8 @@ class MainController extends AbstractController
         if (in_array($user, $sortie->getUsers()->toArray(), true)) {
             $inscription = true;
         }
+
+        $entityManager->flush();
 
         return $this->render('main/display.html.twig', [
             'sortie' => $sortie,
@@ -99,7 +119,7 @@ class MainController extends AbstractController
             'sortieForm' => $sortieForm->createView()
         ]);
     }
-<<<<<<< HEAD
+
 
 
     public function modify(Sortie $sortie,
@@ -146,6 +166,5 @@ class MainController extends AbstractController
         ]);
     }
 
-=======
->>>>>>> 48eec3c (dynamic display img on register)
+
 }

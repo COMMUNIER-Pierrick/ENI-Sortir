@@ -1,5 +1,57 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello MainController!{% endblock %}
+{% block title %}Accueil{% endblock %}
+
+{% block body %}
+    <h3>Date du jour: {{ "now"|date("d/m/Y") }}</h3>
+    <h3>Participant: {{ utilisateur.prenom }} {{ utilisateur.nom|first }}.</h3>
 
 
+
+    <table>
+        <tr>
+            <th>Nom de la sortie</th>
+            <th>Date de la sortie</th>
+            <th>Clôture</th>
+            <th>Inscrits/Places</th>
+            <th>Etat</th>
+            <th>Inscrit</th>
+            <th>Organisateur</th>
+            <th>Actions</th>
+        </tr>
+        {% for sortie in sorties %}
+        <tr>
+            <th>{{ sortie.nom }}</th>
+            <th>{{ sortie.dateHeureDebut|date("d/m/Y H:i")  }}</th>
+            <th>{{ sortie.dateLimiteInscription|date("d/m/Y")  }}</th>
+            <th>{{ sortie.users.count }}/{{ sortie.nbInscriptionsMax }}</th>
+            <th>{{ sortie.etatSortie.libelle }}</th>
+            <th>
+                {% set inscrit = false %}
+                {% for user in sortie.users %}
+                    {% if user.id is same as utilisateur.id %}
+                        X
+                        {% set inscrit = true %}
+                    {% endif %}
+                {% endfor %}
+            </th>
+            <th>{{ sortie.organisateur.prenom }} {{ sortie.organisateur.nom|first }}.</th>
+            <th>
+                {% if sortie.etatSortie.id is same as 1 %}
+                    <a href="{{ path('Main_modify', {'id': sortie.id}) }}">Modifier-Publier</a>
+                {% elseif sortie.etatSortie.id >=3  %}
+                    <a href="{{ path('Main_display', {'id': sortie.id}) }}">Afficher</a>
+                {% elseif sortie.etatSortie.id is same as 2 and inscrit %}
+                    <a href="{{ path('Main_display', {'id': sortie.id}) }}">Afficher-Se désister</a>
+                {% else %}
+                    <a href="{{ path('Main_display', {'id': sortie.id}) }}">Afficher-S'inscrire</a>
+                {% endif %}
+            </th>
+        </tr>
+        {% endfor %}
+    </table>
+    <br>
+    <a href="{{ path('Main_create') }}"><button>Créer une sortie</button></a>
+    <br>
+
+{% endblock %}
