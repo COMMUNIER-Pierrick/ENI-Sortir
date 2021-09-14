@@ -4,7 +4,6 @@
 
 {% block body %}
 {% block stylesheets %}{{ encore_entry_link_tags('app') }}{% endblock %}
-<form method="post">
     <div class="bg-white sm:bg-gray-200 h-screen w-screen flex flex-col justify-center items-center">
       <div class="bg-white shadow-none sm:shadow-lg px-8 sm:px-12 w-full xs:w-full sm:w-8/12 md:w-7/12 lg:w-7/12 xl:w-2/6 h-screen sm:h-auto py-8">
         <div class="text-center w-full font-bold text-3xl text-gray-600 p-4">
@@ -93,16 +92,5 @@
       </div>
       <div class="p-4">© Sortir.com 2021</div>
     </div>
-
-    <h1 class="h3 mb-3 font-weight-normal"></h1>
-    <label for="inputEmail">Email :</label>
-    <input type="email" value="{{ last_username }}" name="email" id="inputEmail" class="form-control" autocomplete="email">
-    <label for="inputPassword">Mot de passe :</label>
-    <input type="password" name="password" id="inputPassword" class="form-control" autocomplete="current-password" required>
-
-    <button class="btn btn-lg btn-primary" type="submit">
-        Connection
-    </button>
-</form>
 {% block javascripts %}{{ encore_entry_script_tags('app') }}{% endblock %}
 {% endblock %}
