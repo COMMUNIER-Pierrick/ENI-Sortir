@@ -5,7 +5,7 @@
         <meta name="viewport"
               content="width=device-width, user-scalable=yes, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
         <meta http-equiv="X-UA-Compatible" content="ie=edge">
-        <title>{% block title %}Welcome!{% endblock %}</title>
+        <title>{% block title %}{% endblock %}</title>
         {% block stylesheets %}
 
         {% endblock %}
@@ -14,6 +14,7 @@
     <header>
         <div class="bg-gray-300">
             <h1><a href="{{ path('Main') }}" title="Go back to homepage">Sortir.com</a></h1>
+            {% if is_granted("ROLE_ADMIN") or is_granted("ROLE_USER") %}
             <nav>
                 <ul>
                     {% if is_granted("ROLE_ADMIN") %}
@@ -38,6 +39,7 @@
                     </li>
                 </ul>
             </nav>
+            {% endif %}
         </div>
     </header>
 

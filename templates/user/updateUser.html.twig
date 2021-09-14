@@ -20,7 +20,9 @@
 
     {{ form_end(form) }}
 
+    {% if user.picture %}
     <img id="showImg" height="64" src="/uploads/{{ user.picture.image }}" alt="">
+    {% endif %}
 
 </div>
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
