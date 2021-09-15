@@ -60,7 +60,8 @@ class SortieRepository extends ServiceEntityRepository
             ->leftJoin('t.etatSortie', 's')->addSelect('s')
             ->leftJoin('t.organisateur', 'o')->addSelect('o')
             ->leftJoin('t.users', 'u')->addSelect('u')
-            ->leftJoin('t.lieu', 'l')->addSelect('l');
+            ->leftJoin('t.lieu', 'l')->addSelect('l')
+            ->orderBy('t.dateHeureDebut', 'DESC');
 
 
         if (!empty($searchData['keyword'])){
@@ -91,15 +92,16 @@ class SortieRepository extends ServiceEntityRepository
         }
 
         if (!empty($searchData['subscribed_to'])){
-
+            $checkBoxesOr->add($queryBuilder->expr()->in('u.id', $user->getId()));
         }
 
-        if (!empty($searchData['not_subscribed_to'])){
-
+        if (!empty($searchData['not_subscribed_to'])) {
+            $checkBoxesOr->add($queryBuilder->expr()->notIn('u.id', $user->getId()));
+            $checkBoxesOr->add($queryBuilder->expr()->isNull('u.id'));
         }
 
         if (!empty($searchData['passed_trips'])){
-            //$checkBoxesOr->add($queryBuilder->expr()->eq('start_at_max_date', "now"));
+            $checkBoxesOr->add($queryBuilder->expr()->eq('s.id', '5'));
         }
 
 
