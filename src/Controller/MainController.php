@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Sortie;
 use App\Form\FilterType;
+use App\Entity\User;
 use App\Form\TripType;
 use App\Repository\EtatRepository;
 use App\Repository\SortieRepository;
@@ -12,12 +13,14 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Console\Input\Input;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Validator\Constraints\DateTime;
 
 class MainController extends AbstractController
 {
 
-    public function index(Request $request, SortieRepository $sortieRepository, UserRepository $userRepository): Response
+    public function index(Request $request, SortieRepository $sortieRepository, UserRepository $userRepository, EtatRepository $etatRepository): Response
     {
 
         $user = $userRepository->findOneBy(
@@ -36,13 +39,60 @@ class MainController extends AbstractController
         ];
 
         $filterForm = $this->createForm(FilterType::class, $searchData);
+        $sorties = findAllTripsWithFilter($this->getUser(), $searchData);
+        foreach ($sorties as $sortie){
 
-        $filterForm->handleRequest($request);
+            date_default_timezone_set('Europe/Paris');
+            $dateNow = date("Y-m-d H:i");
+            $dateLimite = $sortie->getDateLimiteInscription();
+            $nbMaxParticipant = $sortie->getNbInscriptionsMax();
+            $nbParticipant = $sortie->getUsers()->count();
+            $dateFin = $sortie->getDateHeureDebut();
+            $stringDate = $dateFin->format("Y-m-d H:i");
+            $duree = $sortie->getDuree();
+            $dateFin = date("Y-m-d H:i", strtotime($stringDate.'+'.$duree.'hours'));
 
-        $searchData = $filterForm->getData();
+            $etatSortie = $sortie->getEtatSortie()->getId();
 
-        $sorties = $sortieRepository->findAllTripsWithFilter($this->getUser(), $searchData);
+            if(!$etatSortie == 7 || !$etatSortie == 1){
 
+                $interval = abs(strtotime($dateFin) - strtotime($dateNow));
+                $years = floor($interval / (365*60*60*24));
+                $months = floor(($interval - $years*365*60*60*24)/(30*60*60*24));
+
+                if($months >= 1 && $etatSortie == 6 || $etatSortie == 5){
+                    $etat = $etatRepository->findAll()[6];
+                    $sortie->setEtatSortie($etat);
+                }
+
+                if($etatSortie == 4 && $dateNow >= $dateFin){
+                    $etat = $etatRepository->findAll()[4];
+                    $sortie->setEtatSortie($etat);
+                }
+
+                if($etatSortie == 3 && $dateNow >= $sortie->getDateHeureDebut()){
+                    $etat = $etatRepository->findAll()[3];
+                    $sortie->setEtatSortie($etat);
+                }
+                
+                if($etatSortie == 2 && $nbParticipant == $nbMaxParticipant || $dateNow > $dateLimite){
+                    $etat = $etatRepository->findAll()[2];
+                    $sortie->setEtatSortie($etat);
+                }
+                
+                if($etatSortie == 2 && $nbParticipant != $nbMaxParticipant || $dateNow <= $dateLimite){
+                    $etat = $etatRepository->findAll()[0];
+                    $sortie->setEtatSortie($etat);
+                }
+                
+                $filterForm->handleRequest($request);
+
+                $searchData = $filterForm->getData();
+                $sorties = $sortieRepository->findAllTripsWithFilter($this->getUser(), $searchData);
+                
+            }
+
+        }
         return $this->render('main/index.html.twig', [
             "sorties" => $sorties,
             "utilisateur" => $user,
@@ -51,17 +101,19 @@ class MainController extends AbstractController
     }
 
 
-
     public function display(
         int $id,
         SortieRepository $sortieRepository,
         EntityManagerInterface $entityManager,
+        UserRepository $userRepository,
         Request $request
     ): Response {
         $sortie = $sortieRepository->find($id);
-
-        $user = $this->getUser();
-
+        $user = $userRepository->findOneBy(
+            [
+                "email" => $this->getUser()->getUsername()
+            ]
+        );
 
         if ($request->query->has('inscription')) {
             if ($request->query->get('inscription') == 'true') {
@@ -107,9 +159,20 @@ class MainController extends AbstractController
 
         $sortieForm->handleRequest($request);
 
-
         if ($sortieForm->isSubmitted() && $sortieForm->isValid()) {
 
+            $dateLimite = $sortie->getDateLimiteInscription();
+            $dateFin = $sortie->getDateHeureDebut();
+
+            if($dateLimite < $dateFin) {
+
+                $nbMaxParticipant = $sortie->getNbInscriptionsMax();
+
+                if($nbMaxParticipant >= 2) {
+
+                    $duree = $sortie->getDuree();
+
+                    if($duree >= 1) {
 
                 if ($sortieForm->getClickedButton() && 'publish' === $sortieForm->getClickedButton()->getName()) {
                     $etat = $etatRepository->findAll()[1];
@@ -126,15 +189,28 @@ class MainController extends AbstractController
 
 
                 return $this->redirectToRoute('Main_display', ['id' => $sortie->getId()]);
+                        return $this->redirectToRoute('Main_display', ['id' => $sortie->getId()]);
+                    }
+                    $this->addFlash('warning', "Echec de l'inscription ! La durée doit être au moins égale à 1");
+                    return $this->render('main/create.html.twig', [
+                        'sortieForm' => $sortieForm->createView()
+                    ]);
+                }
+                $this->addFlash('warning', "Echec de l'inscription ! Le nombre de place doit être égale ou supérieure à 2");
+                return $this->render('main/create.html.twig', [
+                    'sortieForm' => $sortieForm->createView()
+                ]);
+            }
+            $this->addFlash('warning', "Echec de l'inscription ! La date limite d'inscription ne peut pas être superieur a celle de la sortie");
+            return $this->render('main/create.html.twig', [
+                'sortieForm' => $sortieForm->createView()
+            ]);
         }
-
 
         return $this->render('main/create.html.twig', [
             'sortieForm' => $sortieForm->createView()
         ]);
     }
-
-
 
     public function modify(
         Sortie $sortie,

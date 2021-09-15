@@ -49,7 +49,7 @@
     <br>
 
     {% if sortie.etatSortie.id == 2 %}
-        {% if inscription %}
+        {% if inscription == true %}
             <a href="?inscription=false"> Se désister </a>
         {% else %}
             <a href="?inscription=true"> S'inscrire </a>
