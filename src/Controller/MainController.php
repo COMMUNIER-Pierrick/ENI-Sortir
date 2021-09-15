@@ -10,6 +10,7 @@ use App\Repository\SortieRepository;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -102,9 +103,11 @@ class MainController extends AbstractController
         $sortie = new Sortie();
         $sortie->setOrganisateur($user);
 
-        $sortieForm = $this->createForm(TripType::class, $sortie);
+        $sortieForm = $this->createForm(TripType::class, $sortie)
+            ->add('cansel', SubmitType::class, ['label'=>'Annuler']);
 
         $sortieForm->handleRequest($request);
+
 
         if ($sortieForm->isSubmitted() && $sortieForm->isValid()) {
 
@@ -136,6 +139,8 @@ class MainController extends AbstractController
         ]);
     }
 
+
+
     public function modify(
         Sortie $sortie,
         Request $request,
@@ -144,7 +149,11 @@ class MainController extends AbstractController
     ): Response {
 
 
-        $sortieForm = $this->createForm(TripType::class, $sortie);
+        $sortieForm = $this->createForm(TripType::class, $sortie)
+            ->add('delete', SubmitType::class, ['label' => 'Supprimer la sortie'])
+            ->add('cansel', SubmitType::class, ['label'=>'Annuler']);
+
+
 
         $sortieForm->handleRequest($request);
 
@@ -158,10 +167,16 @@ class MainController extends AbstractController
                     $etat = $etatRepository->findAll()[1];
                     $sortie->setEtatSortie($etat);
                     $this->addFlash('success', 'La sortie a été publiée!');
-                } else {
+                } elseif ($sortieForm->getClickedButton() && 'create' === $sortieForm->getClickedButton()->getName()){
                     $etat = $etatRepository->findAll()[0];
                     $sortie->setEtatSortie($etat);
                     $this->addFlash('success', 'La sortie a été modifiée!');
+                } else {
+                    $entityManager->remove($sortie);
+                    $entityManager->flush();
+
+                    return $this->redirectToRoute('Main');
+
                 }
 
                 $entityManager->persist($sortie);
