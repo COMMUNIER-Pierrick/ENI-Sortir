@@ -4,7 +4,9 @@ namespace App\Repository;
 
 use App\Entity\Sortie;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\Tools\Pagination\Paginator;
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * @method Sortie|null find($id, $lockMode = null, $lockVersion = null)
@@ -14,10 +16,105 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class SortieRepository extends ServiceEntityRepository
 {
+
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Sortie::class);
     }
+
+    public function findWithJoins(int $id)
+    {
+        $qb = $this->createQueryBuilder('e');
+        $qb
+            ->andWhere('e.id = :id')->setParameter(':id', $id)
+
+            ->leftJoin('e.etatSortie', 's')->addSelect('s')
+            ->leftJoin('e.organisateur', 'o')->addSelect('o')
+            ->leftJoin('e.campus', 'c')->addSelect('c')
+            ->leftJoin('e.users', 'u')->addSelect('u')
+            ->leftJoin('e.lieu', 'l')->addSelect('l');
+
+        return $qb->getQuery()->getResult();
+    }
+
+   public function findAllTrips()
+   {
+       $queryBuilder = $this->createQueryBuilder('t');
+       $queryBuilder
+           ->leftJoin('t.etatSortie', 's')->addSelect('s')
+           ->leftJoin('t.organisateur', 'o')->addSelect('o')
+           ->leftJoin('t.users', 'u')->addSelect('u')
+           ->leftJoin('t.lieu', 'l')->addSelect('l');
+       $query = $queryBuilder -> getQuery();
+
+       $paginator = new Paginator($query);
+
+       return $paginator;
+
+   }
+
+    public function findAllTripsWithFilter(UserInterface $user, ?array $searchData)
+    {
+        $queryBuilder = $this->createQueryBuilder('t');
+        $queryBuilder
+            ->leftJoin('t.etatSortie', 's')->addSelect('s')
+            ->leftJoin('t.organisateur', 'o')->addSelect('o')
+            ->leftJoin('t.users', 'u')->addSelect('u')
+            ->leftJoin('t.lieu', 'l')->addSelect('l');
+
+
+        if (!empty($searchData['keyword'])){
+            $queryBuilder->andWhere('t.nom LIKE :kw')
+                ->setParameter('kw', '%'.$searchData['keyword'].'%');
+        }
+
+        if (!empty($searchData['campus'])){
+            $queryBuilder->andWhere('t.campus = :school')
+                ->setParameter('school', $searchData['campus']);
+        }
+
+        if (!empty($searchData['start_at_min_date'])){
+            $queryBuilder->andWhere('t.dateHeureDebut >= :start_at_min_date')
+                ->setParameter('start_at_min_date', $searchData['start_at_min_date']);
+        }
+
+        if (!empty($searchData['start_at_max_date'])){
+            $queryBuilder->andWhere('t.dateHeureDebut <= :start_at_max_date')
+                ->setParameter('start_at_max_date', $searchData['start_at_max_date']);
+        }
+
+
+        $checkBoxesOr = $queryBuilder->expr()->orX();
+
+        if (!empty($searchData['is_organizer'])){
+            $checkBoxesOr->add($queryBuilder->expr()->eq('o', $user->getId()));
+        }
+
+        if (!empty($searchData['subscribed_to'])){
+
+        }
+
+        if (!empty($searchData['not_subscribed_to'])){
+
+        }
+
+        if (!empty($searchData['passed_trips'])){
+            //$checkBoxesOr->add($queryBuilder->expr()->eq('start_at_max_date', "now"));
+        }
+
+
+        $queryBuilder->andWhere($checkBoxesOr);
+
+        $query = $queryBuilder -> getQuery();
+
+        $paginator = new Paginator($query);
+
+        return $paginator;
+
+    }
+
+
+
 
     // /**
     //  * @return Sortie[] Returns an array of Sortie objects
