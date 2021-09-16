@@ -5,7 +5,32 @@
 {% block body %}
     <h3>Date du jour: {{ "now"|date("d/m/Y") }}</h3>
     <h3>Participant: {{ utilisateur.prenom }} {{ utilisateur.nom|first }}.</h3>
+    <br>
 
+    <h2>Filtrer les sorties</h2>
+
+    <div>
+        {{ form_start(filterForm) }}
+        <div>
+            {{ form_row(filterForm.campus) }}
+            {{ form_row(filterForm.keyword) }}
+        </div>
+        <div>
+            {{ form_row(filterForm.start_at_min_date) }}
+            {{ form_row(filterForm.start_at_max_date) }}
+        </div>
+        <div>
+            {{ form_row(filterForm.is_organizer) }}
+            {{ form_row(filterForm.subscribed_to) }}
+            {{ form_row(filterForm.not_subscribed_to) }}
+            {{ form_row(filterForm.passed_trips) }}
+        </div>
+        <div>
+            {{ form_row(filterForm.submit) }}
+        </div>
+        {{ form_end(filterForm) }}
+    </div>
+    <br>
 
 
     <table>

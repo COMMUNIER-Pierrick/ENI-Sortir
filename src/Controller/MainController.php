@@ -3,19 +3,21 @@
 namespace App\Controller;
 
 use App\Entity\Sortie;
+use App\Form\FilterType;
 use App\Form\TripType;
 use App\Repository\EtatRepository;
 use App\Repository\SortieRepository;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 class MainController extends AbstractController
 {
 
-    public function index(SortieRepository $sortieRepository, UserRepository $userRepository): Response
+    public function index(Request $request, SortieRepository $sortieRepository, UserRepository $userRepository): Response
     {
 
         $user = $userRepository->findOneBy(
@@ -24,14 +26,30 @@ class MainController extends AbstractController
             ]
         );
 
-        $sorties = $sortieRepository->findAll();
+        $searchData = [
+            'subscribed_to' => false,
+            'not_subscribed_to' => false,
+            'is_organizer' => false,
+            'passed_trips' => false,
+            'start_at_min_date' => new \DateTime("- 1 month"),
+            'start_at_max_date' => new \DateTime("+ 1 year"),
+        ];
 
+        $filterForm = $this->createForm(FilterType::class, $searchData);
+
+        $filterForm->handleRequest($request);
+
+        $searchData = $filterForm->getData();
+
+        $sorties = $sortieRepository->findAllTripsWithFilter($this->getUser(), $searchData);
 
         return $this->render('main/index.html.twig', [
             "sorties" => $sorties,
-            "utilisateur" => $user
+            "utilisateur" => $user,
+            'filterForm' => $filterForm->createView()
         ]);
     }
+
 
 
     public function display(
@@ -41,6 +59,7 @@ class MainController extends AbstractController
         Request $request
     ): Response {
         $sortie = $sortieRepository->find($id);
+
         $user = $this->getUser();
 
 
@@ -88,20 +107,18 @@ class MainController extends AbstractController
 
         $sortieForm->handleRequest($request);
 
+
         if ($sortieForm->isSubmitted() && $sortieForm->isValid()) {
 
-            if ($sortieForm->getClickedButton() && 'cansel' === $sortieForm->getClickedButton()->getName()) {
-                return $this->redirectToRoute('Main');
-            } else {
 
                 if ($sortieForm->getClickedButton() && 'publish' === $sortieForm->getClickedButton()->getName()) {
                     $etat = $etatRepository->findAll()[1];
                     $sortie->setEtatSortie($etat);
-                    $this->addFlash('success', 'Your trip is open to inscriptions!');
+                    $this->addFlash('success', 'La sortie a été publiée!');
                 } else {
                     $etat = $etatRepository->findAll()[0];
                     $sortie->setEtatSortie($etat);
-                    $this->addFlash('success', 'Your trip data has been saved!');
+                    $this->addFlash('success', 'La sortie a été enregistrée!');
                 }
 
                 $entityManager->persist($sortie);
@@ -109,7 +126,6 @@ class MainController extends AbstractController
 
 
                 return $this->redirectToRoute('Main_display', ['id' => $sortie->getId()]);
-            }
         }
 
 
@@ -117,6 +133,8 @@ class MainController extends AbstractController
             'sortieForm' => $sortieForm->createView()
         ]);
     }
+
+
 
     public function modify(
         Sortie $sortie,
@@ -126,24 +144,29 @@ class MainController extends AbstractController
     ): Response {
 
 
-        $sortieForm = $this->createForm(TripType::class, $sortie);
+        $sortieForm = $this->createForm(TripType::class, $sortie)
+            ->add('delete', SubmitType::class, ['label' => 'Supprimer la sortie']);
+
+
 
         $sortieForm->handleRequest($request);
 
         if ($sortieForm->isSubmitted() && $sortieForm->isValid()) {
 
-            if ($sortieForm->getClickedButton() && 'cansel' === $sortieForm->getClickedButton()->getName()) {
-                return $this->redirectToRoute('Main');
-            } else {
-
                 if ($sortieForm->getClickedButton() && 'publish' === $sortieForm->getClickedButton()->getName()) {
                     $etat = $etatRepository->findAll()[1];
                     $sortie->setEtatSortie($etat);
-                    $this->addFlash('success', 'Your trip is now open to inscriptions!');
-                } else {
+                    $this->addFlash('success', 'La sortie a été publiée!');
+                } elseif ($sortieForm->getClickedButton() && 'create' === $sortieForm->getClickedButton()->getName()){
                     $etat = $etatRepository->findAll()[0];
                     $sortie->setEtatSortie($etat);
-                    $this->addFlash('success', 'Your trip data has been updated!');
+                    $this->addFlash('success', 'La sortie a été modifiée!');
+                } else {
+                    $entityManager->remove($sortie);
+                    $entityManager->flush();
+
+                    return $this->redirectToRoute('Main');
+
                 }
 
                 $entityManager->persist($sortie);
@@ -151,7 +174,6 @@ class MainController extends AbstractController
 
 
                 return $this->redirectToRoute('Main_display', ['id' => $sortie->getId()]);
-            }
         }
 
 
