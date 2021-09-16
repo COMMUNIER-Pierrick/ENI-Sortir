@@ -48,7 +48,7 @@
     {% endif %}
     <br>
 
-    {% if sortie.etat == 1%}
+    {% if sortie.etatSortie.id == 2 %}
         {% if inscription %}
             <a href="?inscription=false"> Se désister </a>
         {% else %}

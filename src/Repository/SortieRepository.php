@@ -61,6 +61,7 @@ class SortieRepository extends ServiceEntityRepository
             ->leftJoin('t.organisateur', 'o')->addSelect('o')
             ->leftJoin('t.users', 'u')->addSelect('u')
             ->leftJoin('t.lieu', 'l')->addSelect('l')
+            ->andWhere('s.id != 7')
             ->orderBy('t.dateHeureDebut', 'DESC');
 
 
@@ -85,27 +86,27 @@ class SortieRepository extends ServiceEntityRepository
         }
 
 
-        $checkBoxesOr = $queryBuilder->expr()->orX();
+        $filters = $queryBuilder->expr()->orX();
 
         if (!empty($searchData['is_organizer'])){
-            $checkBoxesOr->add($queryBuilder->expr()->eq('o', $user->getId()));
+            $filters->add($queryBuilder->expr()->eq('o', $user->getId()));
         }
 
         if (!empty($searchData['subscribed_to'])){
-            $checkBoxesOr->add($queryBuilder->expr()->in('u.id', $user->getId()));
+            $filters->add($queryBuilder->expr()->in('u.id', $user->getId()));
         }
 
         if (!empty($searchData['not_subscribed_to'])) {
-            $checkBoxesOr->add($queryBuilder->expr()->notIn('u.id', $user->getId()));
-            $checkBoxesOr->add($queryBuilder->expr()->isNull('u.id'));
+            $filters->add($queryBuilder->expr()->notIn('u.id', $user->getId()));
+            $filters->add($queryBuilder->expr()->isNull('u.id'));
         }
 
         if (!empty($searchData['passed_trips'])){
-            $checkBoxesOr->add($queryBuilder->expr()->eq('s.id', '5'));
+            $filters->add($queryBuilder->expr()->eq('s.id', '5'));
         }
 
 
-        $queryBuilder->andWhere($checkBoxesOr);
+        $queryBuilder->andWhere($filters);
 
         $query = $queryBuilder -> getQuery();
 

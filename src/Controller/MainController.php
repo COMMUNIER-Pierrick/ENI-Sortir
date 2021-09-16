@@ -103,17 +103,13 @@ class MainController extends AbstractController
         $sortie = new Sortie();
         $sortie->setOrganisateur($user);
 
-        $sortieForm = $this->createForm(TripType::class, $sortie)
-            ->add('cansel', SubmitType::class, ['label'=>'Annuler']);
+        $sortieForm = $this->createForm(TripType::class, $sortie);
 
         $sortieForm->handleRequest($request);
 
 
         if ($sortieForm->isSubmitted() && $sortieForm->isValid()) {
 
-            if ($sortieForm->getClickedButton() && 'cansel' === $sortieForm->getClickedButton()->getName()) {
-                return $this->redirectToRoute('Main');
-            } else {
 
                 if ($sortieForm->getClickedButton() && 'publish' === $sortieForm->getClickedButton()->getName()) {
                     $etat = $etatRepository->findAll()[1];
@@ -130,7 +126,6 @@ class MainController extends AbstractController
 
 
                 return $this->redirectToRoute('Main_display', ['id' => $sortie->getId()]);
-            }
         }
 
 
@@ -150,18 +145,13 @@ class MainController extends AbstractController
 
 
         $sortieForm = $this->createForm(TripType::class, $sortie)
-            ->add('delete', SubmitType::class, ['label' => 'Supprimer la sortie'])
-            ->add('cansel', SubmitType::class, ['label'=>'Annuler']);
+            ->add('delete', SubmitType::class, ['label' => 'Supprimer la sortie']);
 
 
 
         $sortieForm->handleRequest($request);
 
         if ($sortieForm->isSubmitted() && $sortieForm->isValid()) {
-
-            if ($sortieForm->getClickedButton() && 'cansel' === $sortieForm->getClickedButton()->getName()) {
-                return $this->redirectToRoute('Main');
-            } else {
 
                 if ($sortieForm->getClickedButton() && 'publish' === $sortieForm->getClickedButton()->getName()) {
                     $etat = $etatRepository->findAll()[1];
@@ -184,7 +174,6 @@ class MainController extends AbstractController
 
 
                 return $this->redirectToRoute('Main_display', ['id' => $sortie->getId()]);
-            }
         }
 
 
