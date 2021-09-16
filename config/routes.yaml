@@ -14,6 +14,10 @@ Main_modify:
   path: /modify/{id}
   controller: App\Controller\MainController::modify
 
+Main_message_create:
+  path: /Cancel/{id}
+  controller: App\Controller\MainController::CreateMessage
+
 City:
   path: /city
   controller: App\Controller\CityController::index

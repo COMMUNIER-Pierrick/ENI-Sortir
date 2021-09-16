@@ -1,0 +1,33 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Annulation{% endblock %}
+
+{% block body %}
+
+    <div></div>
+        <h1>Annulation</h1>
+
+    <div>
+        Nom de la sortie: {{ sortie.nom }}
+    </div>
+    <div>
+        Date de la sortie: {{ sortie.dateHeureDebut|date("d/m/Y H:i") }}
+    </div>
+    <div>
+        Campus: {{ sortie.campus.nom }}
+    </div>
+    <div>
+        Lieu: {{ sortie.lieu.nom }} {% if sortie.lieu.rue is defined and sortie.lieu.rue is not null %}{{ sortie.lieu.rue }}{% endif %}
+        {% if sortie.lieu.ville.codePostal is defined and sortie.lieu.ville.codePostal is not null %}{{ sortie.lieu.ville.codePostal }}{% endif %}
+        {% if sortie.lieu.ville.nom is defined and sortie.lieu.ville.nom is not null %}{{ sortie.lieu.ville.nom }}{% endif %}
+    </div>
+
+        {{ form_start(annulationForm) }}
+        {{ form_widget(annulationForm) }}
+        <button type="submit" class="btn">Valider</button>
+        {{ form_end(annulationForm) }}
+        <a href="{{ path('Main') }}"><button type="button" class="btn">Annuler</button></a>
+    </div>
+
+
+{% endblock %}

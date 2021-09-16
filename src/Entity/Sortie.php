@@ -71,7 +71,7 @@ class Sortie
     private $campus;
 
     /**
-     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="sortieOrganisees", cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="sortieOrganisees")
      * @ORM\JoinColumn(nullable=false)
      */
     private $organisateur;
@@ -80,6 +80,11 @@ class Sortie
      * @ORM\ManyToMany(targetEntity=User::class, mappedBy="sorties")
      */
     private $users;
+
+    /**
+     * @ORM\OneToOne(targetEntity=Message::class, mappedBy="sortie", cascade={"persist", "remove"})
+     */
+    private $message;
 
     public function __construct()
     {
@@ -246,6 +251,28 @@ class Sortie
         if ($this->users->removeElement($user)) {
             $user->removeSorty($this);
         }
+
+        return $this;
+    }
+
+    public function getMessage(): ?Message
+    {
+        return $this->message;
+    }
+
+    public function setMessage(?Message $message): self
+    {
+        // unset the owning side of the relation if necessary
+        if ($message === null && $this->message !== null) {
+            $this->message->setSortie(null);
+        }
+
+        // set the owning side of the relation if necessary
+        if ($message !== null && $message->getSortie() !== $this) {
+            $message->setSortie($this);
+        }
+
+        $this->message = $message;
 
         return $this;
     }
