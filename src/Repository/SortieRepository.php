@@ -61,7 +61,6 @@ class SortieRepository extends ServiceEntityRepository
             ->leftJoin('t.organisateur', 'o')->addSelect('o')
             ->leftJoin('t.users', 'u')->addSelect('u')
             ->leftJoin('t.lieu', 'l')->addSelect('l')
-            ->andWhere('s.id != 7')
             ->orderBy('t.dateHeureDebut', 'DESC');
 
 
