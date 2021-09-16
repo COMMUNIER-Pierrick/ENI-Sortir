@@ -96,13 +96,21 @@
                     <td>
                         {% if sortie.etatSortie.id is same as 6 %}
                             <p>Sortie annulée</p>
-                        {% elseif sortie.etatSortie.id is same as 1 and sortie.organisateur.id is same as utilisateur.id %}
+                        {% elseif sortie.etatSortie.id <= 2 and sortie.organisateur.id != utilisateur.id and is_granted("ROLE_ADMIN") %}
+                            <a href="{{ path('Main_display', {'id': sortie.id}) }}">Afficher -</a>
+                            <a href="{{ path('Main_message_create', {'id': sortie.id}) }}"> Annuler</a>
+                        {% elseif sortie.etatSortie.id <= 2 and sortie.organisateur.id is same as utilisateur.id and is_granted("ROLE_ADMIN") %}
                             <a href="{{ path('Main_modify', {'id': sortie.id}) }}">Modifier - Publier -</a>
                             <a href="{{ path('Main_message_create', {'id': sortie.id}) }}"> Annuler</a>
+                        {% elseif sortie.etatSortie.id <= 2 and sortie.organisateur.id is same as utilisateur.id and is_granted("ROLE_USER") %}
+                            <a href="{{ path('Main_modify', {'id': sortie.id}) }}">Modifier - Publier -</a>
+                            <a href="{{ path('Main_message_create', {'id': sortie.id}) }}"> Annuler</a>
+                        {% elseif sortie.etatSortie.id == 1 and sortie.organisateur.id != utilisateur.id and is_granted("ROLE_USER") %}
+                            <a href="{{ path('Main_display', {'id': sortie.id}) }}">Afficher</a>
                         {% elseif sortie.etatSortie.id >=3  %}
                             <a href="{{ path('Main_display', {'id': sortie.id}) }}">Afficher</a>
                         {% elseif sortie.etatSortie.id is same as 2 and inscrit == true %}
-                            <a href="{{ path('Main_display', {'id': sortie.id}) }}">Afficher - Se désister</a>
+                            <a href="#">Afficher - Se désister</a>
                         {% else %}
                             <a href="{{ path('Main_display', {'id': sortie.id}) }}">Afficher - S'inscrire</a>
                         {% endif %}
