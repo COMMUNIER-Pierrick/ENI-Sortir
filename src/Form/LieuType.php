@@ -12,6 +12,8 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\NumberType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 
 class LieuType extends AbstractType
 {
@@ -25,17 +27,14 @@ class LieuType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
+            ->add('nom', TextType::class)
             ->add('ville', EntityType::class, [
                 'class' => Ville::class,
-                'label' => 'Ville:',
-            ]);
-
-        $builder->get('ville')->addEventListener(FormEvents::POST_SUBMIT, function (FormEvent $event) {
-            $product = $event->getData();
-            $form = $event->getForm();
-            dump($form);
-            dump($product);
-        });
+            ])
+            ->add('rue', TextType::class)
+            ->add('latitude', NumberType::class)
+            ->add('longitude', NumberType::class)
+            ->add('Envoyer', SubmitType::class);
     }
 
     public function configureOptions(OptionsResolver $resolver)

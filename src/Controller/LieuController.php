@@ -2,6 +2,8 @@
 
 namespace App\Controller;
 
+use App\Entity\Lieu;
+use App\Form\LieuType;
 use App\Repository\LieuRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -10,10 +12,22 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class LieuController extends AbstractController
 {
-    public function index(): Response
+    public function index(Request $request): Response
     {
+        $lieu = new Lieu();
+        $entityManager = $this->getDoctrine()->getManager();
+        $form = $this->createForm(LieuType::class, $lieu);
+
+        // Ajouter une lieu
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager->persist($lieu);
+            $entityManager->flush();
+        }
+
         return $this->render('lieu/index.html.twig', [
-            'controller_name' => 'LieuController',
+            'controller_name' => 'VilleController',
+            'form' => $form->createView(),
         ]);
     }
 

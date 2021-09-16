@@ -101,3 +101,7 @@ Admin_ville_update:
 Get_lieu:
   path: /lieu/{id<\d+>}
   controller: App\Controller\LieuController::getLieu
+
+Add_lieu:
+  path: /lieu/add
+  controller: App\Controller\LieuController::index

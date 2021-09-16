@@ -24,7 +24,15 @@
 
         <div class="group">
             {{ form_row(sortieForm.campus) }}
-            {{ form_row(sortieForm.lieu) }}
+            {{ form_row(sortieForm.ville) }}
+            {{ form_rest(sortieForm) }}
+            <p><span>Rue: </span><span id="rue"></span></p>
+            <p><span>Code Postal: </span><span id="codePostal"></span></p>
+            <p><span>Latitude: </span><span id="latitude"></span></p>
+            <p><span>Longitude: </span><span id="longitude"></span></p>
+            <input type="submit" name="create" value="create">
+            <input type="submit" name="publish" value="publish">
+            <input type="submit" name="cancel" value="cancel">
         </div>
         <br>
         <br>
@@ -36,5 +44,33 @@
         <br>
     </div>
 
+    <script>
+        function loadLieu(){
+            var requete = new XMLHttpRequest();
+
+            document.querySelector('#rue').innerHTML = "";
+            document.querySelector('#codePostal').innerHTML = "";
+            document.querySelector('#longitude').innerHTML = "";
+            document.querySelector('#latitude').innerHTML = "";
+
+            requete.onload = function() {
+            //La variable à passer est alors contenue dans l'objet response et l'attribut responseText.
+                var lieu = JSON.parse(this.responseText);
+
+                document.querySelector('#rue').innerHTML = lieu.rue;
+                document.querySelector('#codePostal').innerHTML = lieu.codePostal;
+                document.querySelector('#longitude').innerHTML = lieu.longitude;
+                document.querySelector('#latitude').innerHTML = lieu.latitude;
+            };
+            const inputLieu = document.querySelector('.lieuInput');
+            requete.open("GET", "/lieu/" + inputLieu.value, true);
+            requete.send();
+        }
+        const inputLieu = document.querySelector('.lieuInput');
+        console.log(inputLieu);
+        inputLieu.addEventListener("change", function(event) {
+           loadLieu();
+        });
+    </script>
 {% endblock %}
 
