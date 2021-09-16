@@ -72,13 +72,12 @@ class TripType extends AbstractType
         $builder->get('ville')->addEventListener(FormEvents::POST_SUBMIT, function (FormEvent $event) {
             $form = $event->getForm();
             $ville = $event->getForm()->getData();
-            dump($form);
-            dump($ville);
             $form->getParent()->add('lieu', EntityType::class, [
                 'class' => Lieu::class,
                 'choice_label' => 'nom',
                 'placeholder' => 'Veuillez choisir un lieu',
-                'choices' => $form->getData()->getLieux()
+                'choices' => $form->getData()->getLieux(),
+                'attr' => ['class' => 'lieuInput'],
             ]);
         });
     }

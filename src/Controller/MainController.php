@@ -185,7 +185,8 @@ class MainController extends AbstractController
         Request $request,
         EntityManagerInterface $entityManager,
         UserRepository $userRepository,
-        EtatRepository $etatRepository
+        EtatRepository $etatRepository,
+        LieuRepository $lieuRepository
     ): Response {
 
         $user = $userRepository->findOneBy(
@@ -265,6 +266,7 @@ class MainController extends AbstractController
 
         return $this->render('main/create.html.twig', [
             'sortieForm' => $sortieForm->createView(),
+            'lieux' => $lieuRepository->findAll(),
         ]);
     }
 

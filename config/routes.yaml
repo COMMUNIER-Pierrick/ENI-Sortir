@@ -59,43 +59,45 @@ User:
   controller: App\Controller\UserController::index
 
 login:
-    path: /login
-    controller: App\Controller\SecurityController::login
+  path: /login
+  controller: App\Controller\SecurityController::login
 
 logout:
-    path: /logout
-    controller: App\Controller\SecurityController::logout
+  path: /logout
+  controller: App\Controller\SecurityController::logout
 
 Admin:
-    path: /admin
-    controller: App\Controller\AdminController::index
+  path: /admin
+  controller: App\Controller\AdminController::index
 
 Admin_register:
-    path: /admin/register
-    controller: App\Controller\RegistrationController::register
+  path: /admin/register
+  controller: App\Controller\RegistrationController::register
 
 Admin_register_file:
   path: /admin/registerFile
   controller: App\Controller\RegistrationController::registerViaFile
 
 Admin_deactivateUser:
-    path: /admin/deactivate
-    controller: App\Controller\AdminController::deactivateUser
+  path: /admin/deactivate
+  controller: App\Controller\AdminController::deactivateUser
 
 Admin_deleteUser:
-    path: /admin/delete
-    controller: App\Controller\AdminController::deleteUser
+  path: /admin/delete
+  controller: App\Controller\AdminController::deleteUser
 
 Admin_cancelTrip:
-    path: /admin/cancel
-    controller: App\Controller\AdminController::cancelTrip
+  path: /admin/cancel
+  controller: App\Controller\AdminController::cancelTrip
 
 Admin_villes:
-    path: /admin/villes
-    controller: App\Controller\VilleController::index
+  path: /admin/villes
+  controller: App\Controller\VilleController::index
 
 Admin_ville_update:
-    path: /admin/villes/{id<\d+>}
-    controller: App\Controller\VilleController::update
+  path: /admin/villes/{id<\d+>}
+  controller: App\Controller\VilleController::update
 
-
+Get_lieu:
+  path: /lieu/{id<\d+>}
+  controller: App\Controller\LieuController::getLieu

@@ -25,10 +25,10 @@ class LieuRepository extends ServiceEntityRepository
     public function findByExampleField($value)
     {
         return $this->createQueryBuilder('l')
-            ->andWhere('l.ville = :val')
+            ->andWhere('l.id = :val')
             ->setParameter('val', $value)
             ->orderBy('l.id', 'ASC')
-            ->setMaxResults(10)
+            ->setMaxResults(1)
             ->getQuery()
             ->getResult();
     }
