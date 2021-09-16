@@ -117,3 +117,7 @@ Password_checkEmail:
 Password_reset:
   path: /reset/{token}
   controller: App\Controller\ResetPasswordController::reset
+
+Password_reset1:
+  path: /reset
+  controller: App\Controller\ResetPasswordController::reset

@@ -92,7 +92,7 @@
                         {% endfor %}
 
                     </td>
-                    <td>{{ sortie.organisateur.prenom }} {{ sortie.organisateur.nom|first }}.</td>
+                    <td><a href="{{ path('Profil_user', {'id': sortie.organisateur.id}) }}">{{ sortie.organisateur.prenom }} {{ sortie.organisateur.nom|first }}.</a></td>
                     <td>
                         {% if sortie.etatSortie.id is same as 6 %}
                             <p>Sortie annulée</p>
