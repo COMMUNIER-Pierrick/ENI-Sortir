@@ -5,7 +5,6 @@ namespace App\Controller;
 use App\Entity\Message;
 use App\Entity\Sortie;
 use App\Form\FilterType;
-use App\Entity\User;
 use App\Form\AnnulationType;
 use App\Form\TripType;
 use App\Repository\EtatRepository;
@@ -15,9 +14,8 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Console\Input\Input;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Validator\Constraints\DateTime;
+
 
 class MainController extends AbstractController
 {
@@ -45,7 +43,8 @@ class MainController extends AbstractController
         ];
 
         $filterForm = $this->createForm(FilterType::class, $searchData);
-        $sorties = findAllTripsWithFilter($this->getUser(), $searchData);
+
+        $sorties = $sortieRepository->findAllTripsWithFilter($this->getUser(), $searchData);
         foreach ($sorties as $sortie){
 
             date_default_timezone_set('Europe/Paris');
@@ -102,16 +101,12 @@ class MainController extends AbstractController
                     $entityManager->flush();
                 }
 
-                $filterForm->handleRequest($request);
-
-                $searchData = $filterForm->getData();
-                $sorties = $sortieRepository->findAllTripsWithFilter($this->getUser(), $searchData);
-
             }
-
         }
+        $filterForm->handleRequest($request);
 
-        $sorties = $sortieRepository->findAllByEtatAndId();
+        $searchData = $filterForm->getData();
+        $sorties = $sortieRepository->findAllTripsWithFilter($this->getUser(), $searchData);
         $idUser = $user->getId();
 
         $i = 0;
