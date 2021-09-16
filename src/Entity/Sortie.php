@@ -2,10 +2,11 @@
 
 namespace App\Entity;
 
-use App\Repository\SortieRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
+use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\SortieRepository;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * @ORM\Entity(repositoryClass=SortieRepository::class)
@@ -55,6 +56,7 @@ class Sortie
     private $etat;
 
     /**
+     * @Assert\NotBlank()
      * @ORM\ManyToOne(targetEntity=Lieu::class, inversedBy="sorties", cascade={"persist"})
      * @ORM\JoinColumn(nullable=false)
      */
@@ -276,5 +278,4 @@ class Sortie
 
         return $this;
     }
-
 }

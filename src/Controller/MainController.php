@@ -2,19 +2,30 @@
 
 namespace App\Controller;
 
+<<<<<<< HEAD
 use App\Entity\Message;
+=======
+use App\Entity\Lieu;
+use App\Entity\Ville;
+>>>>>>> c8bb3dd (lieu form)
 use App\Entity\Sortie;
 use App\Form\FilterType;
 use App\Form\AnnulationType;
 use App\Form\TripType;
 use App\Repository\EtatRepository;
-use App\Repository\SortieRepository;
+use App\Repository\LieuRepository;
 use App\Repository\UserRepository;
+use App\Repository\SortieRepository;
+use App\Repository\VilleRepository;
 use Doctrine\ORM\EntityManagerInterface;
+<<<<<<< HEAD
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+=======
+>>>>>>> c8bb3dd (lieu form)
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 
 class MainController extends AbstractController
@@ -174,7 +185,8 @@ class MainController extends AbstractController
         Request $request,
         EntityManagerInterface $entityManager,
         UserRepository $userRepository,
-        EtatRepository $etatRepository
+        EtatRepository $etatRepository,
+        LieuRepository $lieuRepository
     ): Response {
 
         $user = $userRepository->findOneBy(
@@ -182,7 +194,6 @@ class MainController extends AbstractController
                 "email" => $this->getUser()->getUsername()
             ]
         );
-
 
         $sortie = new Sortie();
         $sortie->setOrganisateur($user);
@@ -193,10 +204,26 @@ class MainController extends AbstractController
 
         if ($sortieForm->isSubmitted() && $sortieForm->isValid()) {
 
+<<<<<<< HEAD
             $dateLimite = $sortie->getDateLimiteInscription();
             $dateFin = $sortie->getDateHeureDebut();
 
             if($dateLimite < $dateFin) {
+=======
+            if ($sortieForm->getClickedButton() && 'cancel' === $sortieForm->getClickedButton()->getName()) {
+                return $this->redirectToRoute('Main');
+            } else {
+                // CODE ICI
+                if ($sortieForm->getClickedButton() && 'publish' === $sortieForm->getClickedButton()->getName()) {
+                    $etat = $etatRepository->findAll()[1];
+                    $sortie->setEtatSortie($etat);
+                    $this->addFlash('success', 'Your trip is open to inscriptions!');
+                } else {
+                    $etat = $etatRepository->findAll()[0];
+                    $sortie->setEtatSortie($etat);
+                    $this->addFlash('success', 'Your trip data has been saved!');
+                }
+>>>>>>> c8bb3dd (lieu form)
 
                 $nbMaxParticipant = $sortie->getNbInscriptionsMax();
 
@@ -238,7 +265,8 @@ class MainController extends AbstractController
         }
 
         return $this->render('main/create.html.twig', [
-            'sortieForm' => $sortieForm->createView()
+            'sortieForm' => $sortieForm->createView(),
+            'lieux' => $lieuRepository->findAll(),
         ]);
     }
 
@@ -259,6 +287,13 @@ class MainController extends AbstractController
 
         if ($sortieForm->isSubmitted() && $sortieForm->isValid()) {
 
+<<<<<<< HEAD
+=======
+            if ($sortieForm->getClickedButton() && 'cancel' === $sortieForm->getClickedButton()->getName()) {
+                return $this->redirectToRoute('Main');
+            } else {
+
+>>>>>>> c8bb3dd (lieu form)
                 if ($sortieForm->getClickedButton() && 'publish' === $sortieForm->getClickedButton()->getName()) {
                     $etat = $etatRepository->findAll()[1];
                     $sortie->setEtatSortie($etat);
