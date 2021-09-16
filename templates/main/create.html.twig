@@ -1,9 +1,5 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}
-
-{% endblock %}
-
 {% block body %}
     <h2>Créer une sortie</h2>
     <div>
@@ -32,6 +28,7 @@
             <input type="submit" name="create" value="create">
             <input type="submit" name="publish" value="publish">
             <a href="{{ path('Main') }}"><button type="button" class="btn">Annuler</button></a>
+            <a href="/lieu/add"> Ajouter un lieu </a>
         </div>
         <br>
         <br>
