@@ -43,6 +43,7 @@
             <th>Inscrit</th>
             <th>Organisateur</th>
             <th>Actions</th>
+            <th>Motif d'annuluation</th>
         </tr>
         {% for sortie in sorties %}
         <tr>
@@ -63,16 +64,22 @@
             </th>
             <th>{{ sortie.organisateur.prenom }} {{ sortie.organisateur.nom|first }}.</th>
             <th>
-                {% if sortie.etatSortie.id is same as 1 and sortie.organisateur.id is same as utilisateur.id %}
-                    <a href="{{ path('Main_modify', {'id': sortie.id}) }}">Modifier -</a>
-                <a href="{{ path('Main_modify', {'id': sortie.id}) }}"> Publier</a>
+                {% if sortie.etatSortie.id is same as 6 %}
+                    <p>Sortie annulée</p>
+                {% elseif sortie.etatSortie.id = 1 and sortie.organisateur.id is same as utilisateur.id %}
+                    <a href="{{ path('Main_modify', {'id': sortie.id}) }}">Modifier - Publier -</a>
+                    <a href="{{ path('Main_message_create', {'id': sortie.id}) }}"> Annuler</a>
                 {% elseif sortie.etatSortie.id >=3  %}
                     <a href="{{ path('Main_display', {'id': sortie.id}) }}">Afficher</a>
                 {% elseif sortie.etatSortie.id is same as 2 and inscrit == true %}
-                    <a href="{{ path('Main_display', {'id': sortie.id}) }}">Afficher-Se désister</a>
+                    <a href="#">Afficher - Se désister</a>
                 {% else %}
-                    <a href="{{ path('Main_display', {'id': sortie.id}) }}">Afficher -</a>
-                <a href="{{ path('Main_display', {'id': sortie.id}) }}"> S'inscrire</a>
+                    <a href="{{ path('Main_display', {'id': sortie.id}) }}">Afficher - S'inscrire</a>
+                {% endif %}
+            </th>
+            <th>
+                {% if sortie.message.motif is defined and sortie.message.motif is not null %}
+                {{ sortie.message.motif }}
                 {% endif %}
             </th>
         </tr>

@@ -2,9 +2,11 @@
 
 namespace App\Controller;
 
+use App\Entity\Message;
 use App\Entity\Sortie;
 use App\Form\FilterType;
 use App\Entity\User;
+use App\Form\AnnulationType;
 use App\Form\TripType;
 use App\Repository\EtatRepository;
 use App\Repository\SortieRepository;
@@ -20,7 +22,11 @@ use Symfony\Component\Validator\Constraints\DateTime;
 class MainController extends AbstractController
 {
 
-    public function index(Request $request, SortieRepository $sortieRepository, UserRepository $userRepository, EtatRepository $etatRepository): Response
+    public function index(SortieRepository $sortieRepository,
+                          Request $request,
+                          UserRepository $userRepository,
+                          EtatRepository $etatRepository,
+                          EntityManagerInterface $entityManager): Response
     {
 
         $user = $userRepository->findOneBy(
@@ -54,45 +60,76 @@ class MainController extends AbstractController
 
             $etatSortie = $sortie->getEtatSortie()->getId();
 
-            if(!$etatSortie == 7 || !$etatSortie == 1){
+            if($etatSortie != 7 || $etatSortie != 1){
 
-                $interval = abs(strtotime($dateFin) - strtotime($dateNow));
-                $years = floor($interval / (365*60*60*24));
-                $months = floor(($interval - $years*365*60*60*24)/(30*60*60*24));
+                $interval = abs(strtotime($dateNow) - strtotime($dateFin));
+                $years = floor($interval / 31536000);
+                $months = floor(($interval - $years*31536000) / (30*60*60*24));
 
-                if($months >= 1 && $etatSortie == 6 || $etatSortie == 5){
+                if($months > 1 && $etatSortie == 6 || $months == 1 && $etatSortie == 6 ||
+                    $months > 1 && $etatSortie == 5 || $months == 1 && $etatSortie == 5){
                     $etat = $etatRepository->findAll()[6];
                     $sortie->setEtatSortie($etat);
+                    $entityManager->persist($sortie);
+                    $entityManager->flush();
                 }
 
                 if($etatSortie == 4 && $dateNow >= $dateFin){
                     $etat = $etatRepository->findAll()[4];
                     $sortie->setEtatSortie($etat);
+                    $entityManager->persist($sortie);
+                    $entityManager->flush();
                 }
 
                 if($etatSortie == 3 && $dateNow >= $sortie->getDateHeureDebut()){
                     $etat = $etatRepository->findAll()[3];
                     $sortie->setEtatSortie($etat);
+                    $entityManager->persist($sortie);
+                    $entityManager->flush();
                 }
-                
-                if($etatSortie == 2 && $nbParticipant == $nbMaxParticipant || $dateNow > $dateLimite){
+
+                if($etatSortie == 2 && $nbParticipant == $nbMaxParticipant || $etatSortie == 2 && $dateNow > $dateLimite){
                     $etat = $etatRepository->findAll()[2];
                     $sortie->setEtatSortie($etat);
+                    $entityManager->persist($sortie);
+                    $entityManager->flush();
                 }
-                
-                if($etatSortie == 2 && $nbParticipant != $nbMaxParticipant || $dateNow <= $dateLimite){
-                    $etat = $etatRepository->findAll()[0];
+
+                if($etatSortie == 2 && $nbParticipant != $nbMaxParticipant || $etatSortie == 2 && $dateNow <= $dateLimite){
+                    $etat = $etatRepository->findAll()[1];
                     $sortie->setEtatSortie($etat);
+                    $entityManager->persist($sortie);
+                    $entityManager->flush();
                 }
-                
+
                 $filterForm->handleRequest($request);
 
                 $searchData = $filterForm->getData();
                 $sorties = $sortieRepository->findAllTripsWithFilter($this->getUser(), $searchData);
-                
+
             }
 
         }
+
+        $sorties = $sortieRepository->findAllByEtatAndId();
+        $idUser = $user->getId();
+
+        $i = 0;
+        $role = $user->getRoles();
+
+        if($role == ["ROLE_USER"]) {
+            foreach ($sorties as $sortie) {
+
+                $idOrganisateur = $sortie->getOrganisateur()->getId();
+                $idEtat = $sortie->getEtatSortie()->getId();
+
+                if ($idOrganisateur != $idUser && $idEtat == 1) {
+                    unset($sorties[$i]);
+                }
+                $i++;
+            }
+        }
+
         return $this->render('main/index.html.twig', [
             "sorties" => $sorties,
             "utilisateur" => $user,
@@ -174,21 +211,19 @@ class MainController extends AbstractController
 
                     if($duree >= 1) {
 
-                if ($sortieForm->getClickedButton() && 'publish' === $sortieForm->getClickedButton()->getName()) {
-                    $etat = $etatRepository->findAll()[1];
-                    $sortie->setEtatSortie($etat);
-                    $this->addFlash('success', 'La sortie a été publiée!');
-                } else {
-                    $etat = $etatRepository->findAll()[0];
-                    $sortie->setEtatSortie($etat);
-                    $this->addFlash('success', 'La sortie a été enregistrée!');
-                }
+                        if ($sortieForm->getClickedButton() && 'publish' === $sortieForm->getClickedButton()->getName()) {
+                            $etat = $etatRepository->findAll()[1];
+                            $sortie->setEtatSortie($etat);
+                            $this->addFlash('success', 'La sortie a été publiée!');
+                        } else {
+                            $etat = $etatRepository->findAll()[0];
+                            $sortie->setEtatSortie($etat);
+                            $this->addFlash('success', 'La sortie a été enregistrée!');
+                        }
 
-                $entityManager->persist($sortie);
-                $entityManager->flush();
+                        $entityManager->persist($sortie);
+                        $entityManager->flush();
 
-
-                return $this->redirectToRoute('Main_display', ['id' => $sortie->getId()]);
                         return $this->redirectToRoute('Main_display', ['id' => $sortie->getId()]);
                     }
                     $this->addFlash('warning', "Echec de l'inscription ! La durée doit être au moins égale à 1");
@@ -250,11 +285,47 @@ class MainController extends AbstractController
 
 
                 return $this->redirectToRoute('Main_display', ['id' => $sortie->getId()]);
-        }
-
+            }
 
         return $this->render('main/modify.html.twig', [
             'sortieForm' => $sortieForm->createView()
+        ]);
+    }
+
+    public function CreateMessage(
+        int $id,
+        SortieRepository $sortieRepository,
+        EntityManagerInterface $entityManager,
+        EtatRepository $etatRepository,
+        Request $request
+    ): Response {
+
+        $sortie = $sortieRepository->find($id);
+
+        $message = new Message();
+
+        $messageForm = $this->createForm(AnnulationType::class, $message);
+
+        $messageForm->handleRequest($request);
+
+        if ($messageForm->isSubmitted() && $messageForm->isValid()) {
+
+            $message->setSortie($sortie);
+
+            $etat = $etatRepository->findAll()[5];
+            $sortie->setEtatSortie($etat);
+            $this->addFlash('success', 'Votre Annulation est confirmer !');
+
+            $entityManager->persist($message);
+            $entityManager->flush();
+
+            return $this->redirectToRoute('Main', ['id' => $sortie->getId()]);
+
+        }
+
+        return $this->render('message/annulation.html.twig', [
+            'annulationForm' => $messageForm->createView(),
+            'sortie' => $sortie,
         ]);
     }
 }
