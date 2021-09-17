@@ -1,5 +1,9 @@
 /*Overrides for Tailwind CSS */
 
+*:hover{
+    text-decoration: none!important;
+}
+
 /*Form fields*/
 .dataTables_wrapper select,
 .dataTables_wrapper .dataTables_filter input {

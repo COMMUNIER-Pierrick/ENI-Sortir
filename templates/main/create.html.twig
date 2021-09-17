@@ -1,5 +1,7 @@
 {% extends 'base.html.twig' %}
 
+{% block title %}Sortir.com{% endblock %}
+
 {% block body %}
 
 
@@ -95,7 +97,9 @@
 
               <div class="md:col-span-5 text-right">
                 <div class="inline-flex items-end">
-                  <button type="submit" class="bg-green-500 hover:bg-green-400 text-white font-bold py-2 px-4 rounded">Valider</button>
+                  <button type="submit" name="create" class="mx-2 bg-green-500 hover:bg-green-400 text-white font-bold py-2 px-4 rounded">Enregistrer</button>
+                  <button type="submit" name="publish" class="mx-2 bg-green-500 hover:bg-green-400 text-white font-bold py-2 px-4 rounded">Publier</button>
+                  <button type="submit" name="cancel" class="mx-2 bg-green-500 hover:bg-green-400 text-white font-bold py-2 px-4 rounded">Annuler</button>
                 </div>
               </div>
             </div>
