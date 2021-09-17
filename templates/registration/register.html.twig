@@ -4,6 +4,7 @@
 
 {% block body %}
 {{ form_start(registrationForm) }}
+
   <div class="min-h-screen p-6 bg-gray-100 flex items-center justify-center">
   <div class="container max-w-screen-lg mx-auto">
     <div>
@@ -21,54 +22,94 @@
             <div class="grid gap-4 gap-y-2 text-sm grid-cols-1 md:grid-cols-5">
               <div class="md:col-span-3">
                 <label for="full_name">Mail</label>
-                {{ form_row(registrationForm.email, {'attr': {'class': 'h-10 border mt-1 rounded px-4 w-full bg-gray-50'}}) }}
+                {{ form_widget(registrationForm.email, {'attr': {'class': 'h-10 border mt-1 rounded px-4 w-full bg-gray-50'}}) }}
+                {% if form_errors(registrationForm.email) %}
+                <div class="mt-1 px-4 py-2 rounded-lg border border-red-500 text-red-600 placeholder-red-600 focus:outline-none focus:ring-2 focus:ring-red-200">
+                  {{ form_errors(registrationForm.email) }}
+                </div>
+                {% endif %}
               </div>
 
               <div class="md:col-span-2">
                 <label for="full_name">Nom</label>
-                {{ form_row(registrationForm.nom, {'attr': {'class': 'h-10 border mt-1 rounded px-4 w-full bg-gray-50'}}) }}
+                {{ form_widget(registrationForm.nom, {'attr': {'class': 'h-10 border mt-1 rounded px-4 w-full bg-gray-50'}}) }}
+                {% if form_errors(registrationForm.nom) %}
+                <div class="mt-1 px-4 py-2 rounded-lg border border-red-500 text-red-600 placeholder-red-600 focus:outline-none focus:ring-2 focus:ring-red-200">
+                  {{ form_errors(registrationForm.nom) }}
+                </div>
+                {% endif %}
               </div>
 
               <div class="md:col-span-3">
                 <label for="email">Mot de passe</label>
-                {{ form_row(registrationForm.plainPassword, {'attr': {'class': 'h-10 border mt-1 rounded px-4 w-full bg-gray-50'}}) }}
+                {{ form_widget(registrationForm.plainPassword, {'attr': {'class': 'h-10 border mt-1 rounded px-4 w-full bg-gray-50'}}) }}
+                {% if form_errors(registrationForm.plainPassword) %}
+                <div class="mt-1 px-4 py-2 rounded-lg border border-red-500 text-red-600 placeholder-red-600 focus:outline-none focus:ring-2 focus:ring-red-200">
+                  {{ form_errors(registrationForm.plainPassword) }}
+                </div>
+                {% endif %}
               </div>
 
               <div class="md:col-span-2">
                 <label for="address">Prenom</label>
-                {{ form_row(registrationForm.prenom, {'attr': {'class': 'h-10 border mt-1 rounded px-4 w-full bg-gray-50'}}) }}
+                {{ form_widget(registrationForm.prenom, {'attr': {'class': 'h-10 border mt-1 rounded px-4 w-full bg-gray-50'}}) }}
+                {% if form_errors(registrationForm.prenom) %}
+                <div class="mt-1 px-4 py-2 rounded-lg border border-red-500 text-red-600 placeholder-red-600 focus:outline-none focus:ring-2 focus:ring-red-200">
+                  {{ form_errors(registrationForm.prenom) }}
+                </div>
+                {% endif %}
               </div>
 
-              <div class="md:col-span-2">
+              <div class="md:col-span-3">
                 <label for="city">Pseudo</label>
-                {{ form_row(registrationForm.pseudo, {'attr': {'class': 'h-10 border mt-1 rounded px-4 w-full bg-gray-50'}}) }}
+                {{ form_widget(registrationForm.pseudo, {'attr': {'class': 'h-10 border mt-1 rounded px-4 w-full bg-gray-50'}}) }}
+                {% if form_errors(registrationForm.pseudo) %}
+                <div class="mt-1 px-4 py-2 rounded-lg border border-red-500 text-red-600 placeholder-red-600 focus:outline-none focus:ring-2 focus:ring-red-200">
+                  {{ form_errors(registrationForm.pseudo) }}
+                </div>
+                {% endif %}
               </div>
 
               <div class="md:col-span-2">
                 <label for="city">Campus</label>
-                {{ form_row(registrationForm.campus, {'attr': {'class': 'h-10 border mt-1 rounded px-4 w-full bg-gray-50'}}) }}
+                {{ form_widget(registrationForm.campus, {'attr': {'class': 'h-10 border mt-1 rounded px-4 w-full bg-gray-50'}}) }}
+                {% if form_errors(registrationForm.campus) %}
+                <div class="mt-1 px-4 py-2 rounded-lg border border-red-500 text-red-600 placeholder-red-600 focus:outline-none focus:ring-2 focus:ring-red-200">
+                  {{ form_errors(registrationForm.campus) }}
+                </div>
+                {% endif %}
               </div>
 
-              <div class="md:col-span-1">
+              <div class="md:col-span-2">
                 <label for="city">Telephone</label>
-                {{ form_row(registrationForm.telephone, {'attr': {'class': 'h-10 border mt-1 rounded px-4 w-full bg-gray-50'}}) }}
+                {{ form_widget(registrationForm.telephone, {'attr': {'class': 'h-10 border mt-1 rounded px-4 w-full bg-gray-50'}}) }}
+                {% if form_errors(registrationForm.telephone) %}
+                <div class="mt-1 px-4 py-2 rounded-lg border border-red-500 text-red-600 placeholder-red-600 focus:outline-none focus:ring-2 focus:ring-red-200">
+                  {{ form_errors(registrationForm.telephone) }}
+                </div>
+                {% endif %}
               </div>
 
               <div class="md:col-span-2">
                 <label for="zipcode">Picture</label>
-                 {{ form_row(registrationForm.picture, {'attr': {'class': 'mt-1 w-full'}}) }}
+                 {{ form_widget(registrationForm.picture, {'attr': {'class': 'mt-1 w-full'}}) }}
+                 {% if form_errors(registrationForm.picture) %}
+                <div class="mt-1 px-4 py-2 rounded-lg border border-red-500 text-red-600 placeholder-red-600 focus:outline-none focus:ring-2 focus:ring-red-200">
+                  {{ form_errors(registrationForm.picture) }}
+                </div>
+                {% endif %}
               </div>
 
               <div class="md:col-span-4">
                 <div class="inline-flex items-center">
-                  {{ form_row(registrationForm.administrateur, {'attr': {'class': 'mt-2'}}) }}
+                  {{ form_widget(registrationForm.administrateur, {'attr': {'class': 'mt-2'}}) }}
                   <label for="billing_same" class="ml-2">Administrateur</label>
                 </div>
               </div>
 
               <div class="md:col-span-2">
                 <div class="inline-flex items-center">
-                  {{ form_row(registrationForm.actif, {'attr': {'class': 'mt-2'}}) }}
+                  {{ form_widget(registrationForm.actif, {'attr': {'class': 'mt-2'}}) }}
                   <label for="billing_same" class="ml-2">Actif</label>
                 </div>
               </div>
@@ -87,11 +128,6 @@
     {{ form_end(registrationForm) }}
   </div>
 </div>
-
-    <h1></h1>
-    
-        
-        
 
     <img id="showImg" height="64" src="" alt="">
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>

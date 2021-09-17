@@ -3,26 +3,29 @@
 {% block title %}Administrateur{% endblock %}
 
 {% block body %}
-    <h1>Menu administrateur</h1>
-    <h2>Que souhaitez vous faire ? :</h2>
-    <nav>
+<div class="text-center">
+    <div class="m-4">
+        <h1 class="text-3xl">Menu administrateur</h1>
+        <h2 class="text-lg">Que souhaitez vous faire ?</h2>
+    </div>
+    <nav class="m-4">
         <ul>
-            <li>
+            <li class="mt-2">
                 <a href="{{ path('Admin_register') }}" title="Go back to new registerpage">Ajout d'un nouvel utilisateur</a>
             </li>
-            <li>
+            <li class="mt-2">
                 <a href="{{ path('Admin_register_file') }}" title="Go back to new registerfilepage">Ajout de nouvel utilisateur(s) via un fichier</a>
             </li>
-            <li>
+            <li class="mt-2">
                 <a href="{{ path('Admin_deactivateUser') }}" title="Go back to deactivatepage">Désactiver un utilisateur</a>
             </li>
-            <li>
+            <li class="mt-2">
                 <a href="{{ path('Admin_deleteUser') }}" title="Go back to new deletepage">Supprimer un utilisateur</a>
             </li>
-            <li>
+            <li class="mt-2">
                 <a href="{{ path('Admin_cancelTrip') }}" title="Go back to new cancelpage">Annuler une sortie</a>
             </li>
         </ul>
     </nav>
-
+</div>
 {% endblock %}
