@@ -22,6 +22,7 @@
         "build": "encore production --progress"
     },
     "dependencies": {
+        "@tailwindcss/forms": "^0.3.3",
         "jquery": "^3.6.0"
     }
 }

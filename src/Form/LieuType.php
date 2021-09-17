@@ -33,8 +33,7 @@ class LieuType extends AbstractType
             ])
             ->add('rue', TextType::class)
             ->add('latitude', NumberType::class)
-            ->add('longitude', NumberType::class)
-            ->add('Envoyer', SubmitType::class);
+            ->add('longitude', NumberType::class);
     }
 
     public function configureOptions(OptionsResolver $resolver)
