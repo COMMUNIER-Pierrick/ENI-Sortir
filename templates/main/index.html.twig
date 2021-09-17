@@ -2,91 +2,143 @@
 
 {% block title %}Accueil{% endblock %}
 
+{% block stylesb %}
+    <meta name="description" content="">
+    <meta name="keywords" content="">
+    <link href="https://unpkg.com/tailwindcss/dist/tailwind.min.css" rel="stylesheet">
+    <!--Replace with your tailwind.css once created-->
+
+    {# bootstrap css et js #}
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js" integrity="sha384-LtrjvnR4Twt/qOuYxE721u19sVFLVSA4hf/rRt6PrZTmiPltdZcI7q7PXQBYTKyf" crossorigin="anonymous"></script>
+
+    <!--Regular Datatables CSS-->
+    <link href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css" rel="stylesheet">
+    <!--Responsive Extension Datatables CSS-->
+    <link href="https://cdn.datatables.net/responsive/2.2.3/css/responsive.dataTables.min.css" rel="stylesheet">
+
+    {# mon css  #}
+    <link rel="stylesheet" href="{{ asset('css/next.css') }}">
+
+{% endblock %}
+
 {% block body %}
-    <h3>Date du jour: {{ "now"|date("d/m/Y") }}</h3>
-    <h3>Participant: {{ utilisateur.prenom }} {{ utilisateur.nom|first }}.</h3>
-    <br>
+    <div class="container w-full md:w-4/5 xl:w-3/5  mx-auto px-2">
 
-    <h2>Filtrer les sorties</h2>
+        <div id="corner">
+            <h4>Date du jour: {{ "now"|date("d/m/Y") }}</h4>
+            <h4>Participant: {{ utilisateur.prenom }} {{ utilisateur.nom|first }}.</h4>
+        </div>
+        <br>
 
-    <div>
-        {{ form_start(filterForm) }}
-        <div>
-            {{ form_row(filterForm.campus) }}
-            {{ form_row(filterForm.keyword) }}
+        <div id="naz">
+            <h2>Filtrer les sorties</h2>
         </div>
-        <div>
-            {{ form_row(filterForm.start_at_min_date) }}
-            {{ form_row(filterForm.start_at_max_date) }}
-        </div>
-        <div>
-            {{ form_row(filterForm.is_organizer) }}
-            {{ form_row(filterForm.subscribed_to) }}
-            {{ form_row(filterForm.not_subscribed_to) }}
-            {{ form_row(filterForm.passed_trips) }}
-        </div>
-        <div>
-            {{ form_row(filterForm.submit) }}
-        </div>
-        {{ form_end(filterForm) }}
-    </div>
-    <br>
+        <br>
 
+        <div class="container ml-0 mr-0 pl-0 pr-0" id="formulaire">
+            {{ form_start(filterForm, {'attr': {'class': 'row'}}) }}
+            <div class="col col-sm-3 d-flex flex-column justify-content-end">
+                {{ form_row(filterForm.campus, {attr: {class: 'form-control-sm'}}) }}
+                {{ form_row(filterForm.keyword, {attr: {class: 'form-control-sm'}}) }}
+            </div>
+            <div class="col col-sm-3 d-flex flex-column justify-content-end">
+                {{ form_row(filterForm.start_at_min_date, {attr: {class: 'form-control-sm'}}) }}
+                {{ form_row(filterForm.start_at_max_date, {attr: {class: 'form-control-sm'}}) }}
+            </div>
+            <div class="col col-sm-4 d-flex flex-column justify-content-end event-filters-checkboxes" id="cb">
+                {{ form_row(filterForm.is_organizer) }}
+                {{ form_row(filterForm.subscribed_to) }}
+                {{ form_row(filterForm.not_subscribed_to) }}
+                {{ form_row(filterForm.passed_trips) }}
+            </div>
+            <div class="col col-sm-2 d-flex flex-column justify-content-end">
+                {{ form_row(filterForm.submit) }}
+            </div>
+            {{ form_end(filterForm) }}
+        </div>
+        <br>
 
-    <table>
-        <tr>
-            <th>Nom de la sortie</th>
-            <th>Date de la sortie</th>
-            <th>Clôture</th>
-            <th>Inscrits/Places</th>
-            <th>Etat</th>
-            <th>Inscrit</th>
-            <th>Organisateur</th>
-            <th>Actions</th>
-            <th>Motif d'annuluation</th>
-        </tr>
-        {% for sortie in sorties %}
-        <tr>
-            <th>{{ sortie.nom }}</th>
-            <th>{{ sortie.dateHeureDebut|date("d/m/Y H:i")  }}</th>
-            <th>{{ sortie.dateLimiteInscription|date("d/m/Y")  }}</th>
-            <th>{{ sortie.users.count }}/{{ sortie.nbInscriptionsMax }}</th>
-            <th>{{ sortie.etatSortie.libelle }}</th>
-            <th>
-                {% set inscrit = false %}
-                {% for user in sortie.users %}
-                    {% if user.id is same as utilisateur.id %}
-                        X
-                        {% set inscrit = true %}
-                    {% endif %}
+        <div id='recipients' class="p-8 mt-6 lg:mt-0 rounded shadow bg-white">
+            <table id="example" class="stripe hover" style="width:100%; padding-top: 1em;  padding-bottom: 1em;">
+                <thead>
+                    <tr>
+                        <th data-priority="1">Nom de la sortie</th>
+                        <th data-priority="2">Date de la sortie</th>
+                        <th data-priority="5">Clôture</th>
+                        <th data-priority="3">Inscrits/Places</th>
+                        <th data-priority="6">Etat</th>
+                        <th data-priority="4">Inscrit</th>
+                        <th data-priority="7">Organisateur</th>
+                        <th data-priority="8">Actions</th>
+                        <th data-priority="9">Motif d'annuluation</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for sortie in sorties %}
+                <tr>
+                    <td>{{ sortie.nom }}</td>
+                    <td>{{ sortie.dateHeureDebut|date("d/m/Y H:i")  }}</td>
+                    <td>{{ sortie.dateLimiteInscription|date("d/m/Y")  }}</td>
+                    <td>{{ sortie.users.count }}/{{ sortie.nbInscriptionsMax }}</td>
+                    <td>{{ sortie.etatSortie.libelle }}</td>
+                    <td>
+                        {% set inscrit = false %}
+                        {% for user in sortie.users %}
+                            {% if user.id is same as utilisateur.id %}
+                                X
+                                {% set inscrit = true %}
+                            {% endif %}
+                        {% endfor %}
+
+                    </td>
+                    <td>{{ sortie.organisateur.prenom }} {{ sortie.organisateur.nom|first }}.</td>
+                    <td>
+                        {% if sortie.etatSortie.id is same as 6 %}
+                            <p>Sortie annulée</p>
+                        {% elseif sortie.etatSortie.id is same as 1 and sortie.organisateur.id is same as utilisateur.id %}
+                            <a href="{{ path('Main_modify', {'id': sortie.id}) }}">Modifier - Publier -</a>
+                            <a href="{{ path('Main_message_create', {'id': sortie.id}) }}"> Annuler</a>
+                        {% elseif sortie.etatSortie.id >=3  %}
+                            <a href="{{ path('Main_display', {'id': sortie.id}) }}">Afficher</a>
+                        {% elseif sortie.etatSortie.id is same as 2 and inscrit == true %}
+                            <a href="{{ path('Main_display', {'id': sortie.id}) }}">Afficher - Se désister</a>
+                        {% else %}
+                            <a href="{{ path('Main_display', {'id': sortie.id}) }}">Afficher - S'inscrire</a>
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if sortie.message.motif is defined and sortie.message.motif is not null %}
+                        {{ sortie.message.motif }}
+                        {% endif %}
+                    </td>
+                </tr>
                 {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <br>
+        <div class="col-md-12 text-center">
+            <a href="{{ path('Main_create') }}"><button id="down">Créer une sortie</button></a>
+        </div>
+        <br>
+    </div>
 
-            </th>
-            <th>{{ sortie.organisateur.prenom }} {{ sortie.organisateur.nom|first }}.</th>
-            <th>
-                {% if sortie.etatSortie.id is same as 6 %}
-                    <p>Sortie annulée</p>
-                {% elseif sortie.etatSortie.id is same as 1 and sortie.organisateur.id is same as utilisateur.id %}
-                    <a href="{{ path('Main_modify', {'id': sortie.id}) }}">Modifier - Publier -</a>
-                    <a href="{{ path('Main_message_create', {'id': sortie.id}) }}"> Annuler</a>
-                {% elseif sortie.etatSortie.id >=3  %}
-                    <a href="{{ path('Main_display', {'id': sortie.id}) }}">Afficher</a>
-                {% elseif sortie.etatSortie.id is same as 2 and inscrit == true %}
-                    <a href="#">Afficher - Se désister</a>
-                {% else %}
-                    <a href="{{ path('Main_display', {'id': sortie.id}) }}">Afficher - S'inscrire</a>
-                {% endif %}
-            </th>
-            <th>
-                {% if sortie.message.motif is defined and sortie.message.motif is not null %}
-                {{ sortie.message.motif }}
-                {% endif %}
-            </th>
-        </tr>
-        {% endfor %}
-    </table>
-    <br>
-    <a href="{{ path('Main_create') }}"><button>Créer une sortie</button></a>
-    <br>
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+
+    <!--Datatables -->
+    <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/responsive/2.2.3/js/dataTables.responsive.min.js"></script>
+    <script>
+        $(document).ready(function() {
+
+            var table = $('#example').DataTable( {
+                responsive: true
+            } )
+                .columns.adjust()
+                .responsive.recalc();
+        } );
+
+    </script>
 
 {% endblock %}
