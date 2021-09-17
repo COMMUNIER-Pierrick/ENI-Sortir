@@ -8,6 +8,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Validator\Constraints\All;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Validator\Constraints\File;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
@@ -22,21 +23,31 @@ class RegistrationFormType extends AbstractType
     {
         $group = new Campus();
         $builder
-            ->add('nom', TextType::class)
-            ->add('prenom', TextType::class)
-            ->add('pseudo', TextType::class)
+            ->add('nom', TextType::class, [
+                'label' => false,
+            ])
+            ->add('prenom', TextType::class, [
+                'label' => false,
+            ])
+            ->add('pseudo', TextType::class, [
+                'label' => false,
+            ])
             ->add('telephone', TextType::class, [
                 'required' => false,
+                'label' => false,
             ])
             ->add('campus', EntityType::class, [
                 'class' => Campus::class,
                 'choice_label' => 'nom',
+                'label' => false,
             ])
-            ->add('email', TextType::class)
+            ->add('email', TextType::class, [
+                'label' => false,
+            ])
             ->add('plainPassword', PasswordType::class, [
                 // instead of being set onto the object directly,
                 // this is read and encoded in the controller
-                'label' => 'Mot de passe',
+                'label' => false,
                 'mapped' => false,
                 'attr' => ['autocomplete' => 'new-password'],
                 'constraints' => [
@@ -57,8 +68,14 @@ class RegistrationFormType extends AbstractType
                 'required' => false,
                 'attr' => ['class' => 'image', 'accept' => ".png,.jpg,.jpeg"],
             ])
-            ->add('administrateur')
-            ->add('actif');
+            ->add('administrateur', CheckboxType::class, [
+                'label' => false,
+                'required' => false,
+            ])
+            ->add('actif', CheckboxType::class, [
+                'label' => false,
+                'required' => false,
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver)

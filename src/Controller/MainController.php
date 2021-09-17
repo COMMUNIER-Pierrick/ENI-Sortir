@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+
 use App\Entity\Message;
 use App\Entity\Lieu;
 use App\Entity\Ville;
@@ -199,22 +200,21 @@ class MainController extends AbstractController
 
         if ($sortieForm->isSubmitted() && $sortieForm->isValid()) {
 
+
             $dateLimite = $sortie->getDateLimiteInscription();
             $dateFin = $sortie->getDateHeureDebut();
 
             if ($dateLimite < $dateFin) {
-                if ($sortieForm->getClickedButton() && 'cancel' === $sortieForm->getClickedButton()->getName()) {
+
+                if ($request->request->get('cancel')) {
                     return $this->redirectToRoute('Main');
                 } else {
-                    // CODE ICI
-                    if ($sortieForm->getClickedButton() && 'publish' === $sortieForm->getClickedButton()->getName()) {
+                    if ($request->request->get('publish')) {
                         $etat = $etatRepository->findAll()[1];
                         $sortie->setEtatSortie($etat);
-                        $this->addFlash('success', 'Your trip is open to inscriptions!');
                     } else {
                         $etat = $etatRepository->findAll()[0];
                         $sortie->setEtatSortie($etat);
-                        $this->addFlash('success', 'Your trip data has been saved!');
                     }
 
                     $nbMaxParticipant = $sortie->getNbInscriptionsMax();
@@ -225,7 +225,7 @@ class MainController extends AbstractController
 
                         if ($duree >= 1) {
 
-                            if ($sortieForm->getClickedButton() && 'publish' === $sortieForm->getClickedButton()->getName()) {
+                            if ($request->request->get('publish')) {
                                 $etat = $etatRepository->findAll()[1];
                                 $sortie->setEtatSortie($etat);
                                 $this->addFlash('success', 'La sortie a été publiée!');
@@ -255,13 +255,13 @@ class MainController extends AbstractController
                     'sortieForm' => $sortieForm->createView()
                 ]);
             }
-
-            return $this->render('main/create.html.twig', [
-                'sortieForm' => $sortieForm->createView(),
-                'lieux' => $lieuRepository->findAll(),
-            ]);
         }
+        return $this->render('main/create.html.twig', [
+            'sortieForm' => $sortieForm->createView(),
+            'lieux' => $lieuRepository->findAll(),
+        ]);
     }
+
     public function modify(
         Sortie $sortie,
         Request $request,
@@ -279,15 +279,15 @@ class MainController extends AbstractController
 
         if ($sortieForm->isSubmitted() && $sortieForm->isValid()) {
 
-            if ($sortieForm->getClickedButton() && 'cancel' === $sortieForm->getClickedButton()->getName()) {
+            if ($request->request->get('cancel')) {
                 return $this->redirectToRoute('Main');
             } else {
 
-                if ($sortieForm->getClickedButton() && 'publish' === $sortieForm->getClickedButton()->getName()) {
+                if ($request->request->get('publish')) {
                     $etat = $etatRepository->findAll()[1];
                     $sortie->setEtatSortie($etat);
                     $this->addFlash('success', 'La sortie a été publiée!');
-                } elseif ($sortieForm->getClickedButton() && 'create' === $sortieForm->getClickedButton()->getName()) {
+                } elseif ($request->request->get('create')) {
                     $etat = $etatRepository->findAll()[0];
                     $sortie->setEtatSortie($etat);
                     $this->addFlash('success', 'La sortie a été modifiée!');

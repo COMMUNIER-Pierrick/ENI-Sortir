@@ -94,6 +94,10 @@ Admin_villes:
   path: /admin/villes
   controller: App\Controller\VilleController::index
 
+Admin_campus:
+  path: /admin/campus
+  controller: App\Controller\CampusController::index
+
 Admin_ville_update:
   path: /admin/villes/{id<\d+>}
   controller: App\Controller\VilleController::update
@@ -105,3 +109,19 @@ Get_lieu:
 Add_lieu:
   path: /lieu/add
   controller: App\Controller\LieuController::index
+
+Reset_password:
+  path: /reset-password
+  controller: App\Controller\ResetPasswordController::request
+
+Password_checkEmail:
+  path: /check-email
+  controller: App\Controller\ResetPasswordController::checkEmail
+
+Password_reset:
+  path: /reset/{token}
+  controller: App\Controller\ResetPasswordController::reset
+
+Password_reset1:
+  path: /reset
+  controller: App\Controller\ResetPasswordController::reset

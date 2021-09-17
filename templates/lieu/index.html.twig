@@ -1,9 +1,88 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello VilleController!{% endblock %}
+{% block title %}Ajout d'un lieu{% endblock %}
 
 {% block body %}
 <div>
-  {{ form(form) }}
+  {{ form_start(form) }}
+      <div class="min-h-screen p-6 bg-gray-100 flex items-center justify-center">
+  <div class="container max-w-screen-lg mx-auto">
+    <div>
+      <h2 class="font-semibold text-xl text-gray-600">Lieu</h2>
+      <p class="text-gray-500 mb-6">Enregistre un nouveau lieu.</p>
+
+      <div class="bg-white rounded shadow-lg p-4 px-4 md:p-8 mb-6">
+        <div class="grid gap-4 gap-y-2 text-sm grid-cols-1 lg:grid-cols-3">
+          <div class="text-gray-600">
+            <p class="font-medium text-lg">Informations géographiques</p>
+            <p>Pense à remplir tout les champs.</p>
+          </div>
+
+          <div class="lg:col-span-2">
+            <div class="grid gap-4 gap-y-2 text-sm grid-cols-1 md:grid-cols-5">
+              <div class="md:col-span-3">
+                <label for="full_name">Nom</label>
+                {{ form_widget(form.nom, {'attr': {'class': 'h-10 border mt-1 rounded px-4 w-full bg-gray-50'}}) }}
+                {% if form_errors(form.nom) %}
+                <div class="mt-1 px-4 py-2 rounded-lg border border-red-500 text-red-600 placeholder-red-600 focus:outline-none focus:ring-2 focus:ring-red-200">
+                  {{ form_errors(form.nom) }}
+                </div>
+                {% endif %}
+              </div>
+
+              <div class="md:col-span-2">
+                <label for="full_name">Rue</label>
+                {{ form_widget(form.rue, {'attr': {'class': 'h-10 border mt-1 rounded px-4 w-full bg-gray-50'}}) }}
+                {% if form_errors(form.rue) %}
+                <div class="mt-1 px-4 py-2 rounded-lg border border-red-500 text-red-600 placeholder-red-600 focus:outline-none focus:ring-2 focus:ring-red-200">
+                  {{ form_errors(form.rue) }}
+                </div>
+                {% endif %}
+              </div>
+
+              <div class="md:col-span-3">
+                <label for="email">Latitude</label>
+                {{ form_widget(form.latitude, {'attr': {'class': 'h-10 border mt-1 rounded px-4 w-full bg-gray-50'}}) }}
+                {% if form_errors(form.latitude) %}
+                <div class="mt-1 px-4 py-2 rounded-lg border border-red-500 text-red-600 placeholder-red-600 focus:outline-none focus:ring-2 focus:ring-red-200">
+                  {{ form_errors(form.latitude) }}
+                </div>
+                {% endif %}
+              </div>
+
+              <div class="md:col-span-2">
+                <label for="address">Longitude</label>
+                {{ form_widget(form.longitude, {'attr': {'class': 'h-10 border mt-1 rounded px-4 w-full bg-gray-50'}}) }}
+                {% if form_errors(form.longitude) %}
+                <div class="mt-1 px-4 py-2 rounded-lg border border-red-500 text-red-600 placeholder-red-600 focus:outline-none focus:ring-2 focus:ring-red-200">
+                  {{ form_errors(form.longitude) }}
+                </div>
+                {% endif %}
+              </div>
+
+              <div class="md:col-span-3">
+                <label for="city">Ville</label>
+                {{ form_widget(form.ville, {'attr': {'class': 'h-10 border mt-1 rounded px-4 w-full bg-gray-50'}}) }}
+                {% if form_errors(form.ville) %}
+                <div class="mt-1 px-4 py-2 rounded-lg border border-red-500 text-red-600 placeholder-red-600 focus:outline-none focus:ring-2 focus:ring-red-200">
+                  {{ form_errors(form.ville) }}
+                </div>
+                {% endif %}
+              </div>
+
+              <div class="md:col-span-5 text-right">
+                <div class="inline-flex items-end">
+                  <button type="submit" class="bg-green-500 hover:bg-green-400 text-white font-bold py-2 px-4 rounded">Valider</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+        
+    </div>
+  </div>
+</div>
+  {{ form_end(form) }}
 </div>
 {% endblock %}

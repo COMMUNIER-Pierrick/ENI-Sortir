@@ -3,12 +3,132 @@
 {% block title %}Inscription{% endblock %}
 
 {% block body %}
-    <h1>Inscription</h1>
+{{ form_start(registrationForm) }}
 
-    {{ form_start(registrationForm) }}
-        {{ form_widget(registrationForm) }}
-        <button type="submit" class="btn">Valider</button>
+  <div class="min-h-screen p-6 bg-gray-100 flex items-center justify-center">
+  <div class="container max-w-screen-lg mx-auto">
+    <div>
+      <h2 class="font-semibold text-xl text-gray-600">Inscription</h2>
+      <p class="text-gray-500 mb-6">Enregistre un nouvel utilisateur.</p>
+
+      <div class="bg-white rounded shadow-lg p-4 px-4 md:p-8 mb-6">
+        <div class="grid gap-4 gap-y-2 text-sm grid-cols-1 lg:grid-cols-3">
+          <div class="text-gray-600">
+            <p class="font-medium text-lg">Informations personnelles</p>
+            <p>Pense à remplir tout les champs.</p>
+          </div>
+
+          <div class="lg:col-span-2">
+            <div class="grid gap-4 gap-y-2 text-sm grid-cols-1 md:grid-cols-5">
+              <div class="md:col-span-3">
+                <label for="full_name">Mail</label>
+                {{ form_widget(registrationForm.email, {'attr': {'class': 'h-10 border mt-1 rounded px-4 w-full bg-gray-50'}}) }}
+                {% if form_errors(registrationForm.email) %}
+                <div class="mt-1 px-4 py-2 rounded-lg border border-red-500 text-red-600 placeholder-red-600 focus:outline-none focus:ring-2 focus:ring-red-200">
+                  {{ form_errors(registrationForm.email) }}
+                </div>
+                {% endif %}
+              </div>
+
+              <div class="md:col-span-2">
+                <label for="full_name">Nom</label>
+                {{ form_widget(registrationForm.nom, {'attr': {'class': 'h-10 border mt-1 rounded px-4 w-full bg-gray-50'}}) }}
+                {% if form_errors(registrationForm.nom) %}
+                <div class="mt-1 px-4 py-2 rounded-lg border border-red-500 text-red-600 placeholder-red-600 focus:outline-none focus:ring-2 focus:ring-red-200">
+                  {{ form_errors(registrationForm.nom) }}
+                </div>
+                {% endif %}
+              </div>
+
+              <div class="md:col-span-3">
+                <label for="email">Mot de passe</label>
+                {{ form_widget(registrationForm.plainPassword, {'attr': {'class': 'h-10 border mt-1 rounded px-4 w-full bg-gray-50'}}) }}
+                {% if form_errors(registrationForm.plainPassword) %}
+                <div class="mt-1 px-4 py-2 rounded-lg border border-red-500 text-red-600 placeholder-red-600 focus:outline-none focus:ring-2 focus:ring-red-200">
+                  {{ form_errors(registrationForm.plainPassword) }}
+                </div>
+                {% endif %}
+              </div>
+
+              <div class="md:col-span-2">
+                <label for="address">Prenom</label>
+                {{ form_widget(registrationForm.prenom, {'attr': {'class': 'h-10 border mt-1 rounded px-4 w-full bg-gray-50'}}) }}
+                {% if form_errors(registrationForm.prenom) %}
+                <div class="mt-1 px-4 py-2 rounded-lg border border-red-500 text-red-600 placeholder-red-600 focus:outline-none focus:ring-2 focus:ring-red-200">
+                  {{ form_errors(registrationForm.prenom) }}
+                </div>
+                {% endif %}
+              </div>
+
+              <div class="md:col-span-3">
+                <label for="city">Pseudo</label>
+                {{ form_widget(registrationForm.pseudo, {'attr': {'class': 'h-10 border mt-1 rounded px-4 w-full bg-gray-50'}}) }}
+                {% if form_errors(registrationForm.pseudo) %}
+                <div class="mt-1 px-4 py-2 rounded-lg border border-red-500 text-red-600 placeholder-red-600 focus:outline-none focus:ring-2 focus:ring-red-200">
+                  {{ form_errors(registrationForm.pseudo) }}
+                </div>
+                {% endif %}
+              </div>
+
+              <div class="md:col-span-2">
+                <label for="city">Campus</label>
+                {{ form_widget(registrationForm.campus, {'attr': {'class': 'h-10 border mt-1 rounded px-4 w-full bg-gray-50'}}) }}
+                {% if form_errors(registrationForm.campus) %}
+                <div class="mt-1 px-4 py-2 rounded-lg border border-red-500 text-red-600 placeholder-red-600 focus:outline-none focus:ring-2 focus:ring-red-200">
+                  {{ form_errors(registrationForm.campus) }}
+                </div>
+                {% endif %}
+              </div>
+
+              <div class="md:col-span-2">
+                <label for="city">Telephone</label>
+                {{ form_widget(registrationForm.telephone, {'attr': {'class': 'h-10 border mt-1 rounded px-4 w-full bg-gray-50'}}) }}
+                {% if form_errors(registrationForm.telephone) %}
+                <div class="mt-1 px-4 py-2 rounded-lg border border-red-500 text-red-600 placeholder-red-600 focus:outline-none focus:ring-2 focus:ring-red-200">
+                  {{ form_errors(registrationForm.telephone) }}
+                </div>
+                {% endif %}
+              </div>
+
+              <div class="md:col-span-2">
+                <label for="zipcode">Picture</label>
+                 {{ form_widget(registrationForm.picture, {'attr': {'class': 'mt-1 w-full'}}) }}
+                 {% if form_errors(registrationForm.picture) %}
+                <div class="mt-1 px-4 py-2 rounded-lg border border-red-500 text-red-600 placeholder-red-600 focus:outline-none focus:ring-2 focus:ring-red-200">
+                  {{ form_errors(registrationForm.picture) }}
+                </div>
+                {% endif %}
+              </div>
+
+              <div class="md:col-span-4">
+                <div class="inline-flex items-center">
+                  {{ form_widget(registrationForm.administrateur, {'attr': {'class': 'mt-2'}}) }}
+                  <label for="billing_same" class="ml-2">Administrateur</label>
+                </div>
+              </div>
+
+              <div class="md:col-span-2">
+                <div class="inline-flex items-center">
+                  {{ form_widget(registrationForm.actif, {'attr': {'class': 'mt-2'}}) }}
+                  <label for="billing_same" class="ml-2">Actif</label>
+                </div>
+              </div>
+
+              <div class="md:col-span-5 text-right">
+                <div class="inline-flex items-end">
+                  <button type="submit" class="bg-green-500 hover:bg-green-400 text-white font-bold py-2 px-4 rounded">Valider</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+        
+    </div>
     {{ form_end(registrationForm) }}
+  </div>
+</div>
+
     <img id="showImg" height="64" src="" alt="">
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script>

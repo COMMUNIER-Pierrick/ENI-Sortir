@@ -6,9 +6,13 @@
               content="width=device-width, user-scalable=yes, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
         <meta http-equiv="X-UA-Compatible" content="ie=edge">
         <title>{% block title %}Welcome!{% endblock %}</title>
-{% block stylesheets %}{{ encore_entry_link_tags('app') }}{% endblock %}
+{% block stylesheets %}
+    {{ encore_entry_link_tags('app') }}
+
+{% endblock %}
+
     </head>
-    <body>
+    <body class="bg-gray-100 text-gray-900 tracking-wider leading-normal">
     <header>
     {% if is_granted("ROLE_ADMIN") or is_granted("ROLE_USER") %}
         <nav class="bg-white shadow-lg">
@@ -34,10 +38,10 @@
                                 {% else %}
                                     <a href="{{ path('Admin_villes') }}" class="py-4 px-2 text-gray-500 font-semibold hover:text-green-500 transition duration-300">Ville</a>
                                 {% endif %}
-                                {% if app.request.pathinfo == '/#' %}
-                                    <a href="#" class="py-4 px-2 text-green-500 border-b-4 border-green-500 font-semibold">Campus</a>
+                                {% if app.request.pathinfo == path('Admin_campus') %}
+                                    <a href="{{ path('Admin_campus') }}" class="py-4 px-2 text-green-500 border-b-4 border-green-500 font-semibold">Campus</a>
                                 {% else %}
-                                    <a href="#" class="py-4 px-2 text-gray-500 font-semibold hover:text-green-500 transition duration-300">Campus</a>
+                                    <a href="{{ path('Admin_campus') }}" class="py-4 px-2 text-gray-500 font-semibold hover:text-green-500 transition duration-300">Campus</a>
                                 {% endif %}
                                 {% if app.request.pathinfo == path('Admin') %}
                                     <a href="{{ path('Admin') }}" class="py-4 px-2 text-green-500 border-b-4 border-green-500 font-semibold">Administrateur</a>
@@ -130,6 +134,9 @@
     <footer class="text-center bg-white shadow-lg p-3">
         © Sortir.com {{ "now"|date("Y") }}
     </footer>
-    {% block javascripts %}{{ encore_entry_script_tags('app') }}{% endblock %}
+    {% block javascripts %}
+        {{ encore_entry_script_tags('app') }}
+
+    {% endblock %}
     </body>
 </html>

@@ -1,0 +1,73 @@
+label {
+    font-weight: bold;
+    display: inline;
+}
+
+
+#filter_campus,
+#filter_keyword,
+#filter_start_at_min_date,
+#filter_start_at_max_date{
+
+    display: block;
+    background-color: #ebebeb;
+    border-color: #10B981;
+    border-width: 1px;
+    box-sizing: border-box;
+    width: auto;
+    max-width: 100%;
+    margin-bottom: 5px;
+
+}
+
+
+#cb{
+
+
+}
+
+#corner {
+    position: absolute;
+    right: 0;
+    color: #10B981;
+    text-shadow: 1px 1px  #d1d7dc ;
+    margin-top: 10px;
+}
+
+#naz {
+    position: relative;
+    margin-top: 50px;
+    margin-bottom: 20px;
+    color:  #10B981;
+    text-shadow: 1px 1px  #d1d7dc ;
+}
+
+#filter_submit{
+    margin-left: 50px;
+    margin-bottom: 5px;
+
+}
+
+#filter_submit,
+#down{
+    font-weight: bold;
+    color: #fff;
+    background-color: #10B981;
+    border: 1px solid white;
+    padding: 15px 30px;
+    border-radius: 5px;
+    transition: all 0.3s ease-in 0s;
+
+}
+#filter_submit:hover,
+#down:hover{
+    background: #ebebeb;
+    color: #10B981;
+    text-decoration:none;
+    border: 1px solid #10B981;
+}
+
+.table-responsive{
+    margin-top: 15px;
+}
+
