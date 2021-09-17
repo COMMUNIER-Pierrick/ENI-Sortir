@@ -21,6 +21,7 @@ class LieuController extends AbstractController
         // Ajouter une lieu
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
+            $this->addFlash('success', 'Le lieu a été enregistrée!');
             $entityManager->persist($lieu);
             $entityManager->flush();
         }

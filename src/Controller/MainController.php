@@ -279,12 +279,6 @@ class MainController extends AbstractController
 
                     return $this->redirectToRoute('Main');
                 }
-
-                $entityManager->persist($sortie);
-                $entityManager->flush();
-
-
-                return $this->redirectToRoute('Main_display', ['id' => $sortie->getId()]);
             }
         }
         return $this->render('main/modify.html.twig', [
