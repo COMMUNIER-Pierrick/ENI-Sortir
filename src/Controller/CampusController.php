@@ -48,4 +48,33 @@ class CampusController extends AbstractController
             'form' => $form->createView(),
         ]);
     }
+
+    public function update(Request $request): Response
+    {
+        $id = $request->attributes->get('id');
+        $entityManager = $this->getDoctrine()->getManager();
+        $campus = $this->getDoctrine()->getRepository(Campus::class)->find($id);
+        $form = $this->createForm(CampusType::class, $campus);
+
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager->flush();
+            $campus = null;
+        }
+
+        return $this->render('campus/update.html.twig', [
+            'controller_name' => 'VilleController',
+            'form' => $form->createView(),
+        ]);
+    }
+
+    public function delete(Request $request): Response
+    {
+        $id = $request->attributes->get('id');
+        $entityManager = $this->getDoctrine()->getManager();
+        $campus = $this->getDoctrine()->getRepository(Campus::class)->find($id);
+        $entityManager->remove($campus);
+
+        return $this->redirectToRoute('Admin_campus');
+    }
 }

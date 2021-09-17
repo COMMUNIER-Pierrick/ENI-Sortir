@@ -98,6 +98,14 @@ Admin_campus:
   path: /admin/campus
   controller: App\Controller\CampusController::index
 
+Admin_modify_campus:
+  path: /admin/campus/{id<\d+>}
+  controller: App\Controller\CampusController::update
+
+Admin_delete_campus:
+  path: /admin/campus/delete/{id<\d+>}
+  controller: App\Controller\CampusController::delete
+
 Admin_ville_update:
   path: /admin/villes/{id<\d+>}
   controller: App\Controller\VilleController::update

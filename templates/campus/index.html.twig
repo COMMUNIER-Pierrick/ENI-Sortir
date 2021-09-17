@@ -116,7 +116,7 @@
                     {% for campus in campusS %}
                         <tr>
                             <td>{{ campus.nom }}</td>
-                            <td><a href="/admin/campus/{{campus.id}}">Modifier</a> - <a href="?delete={{campus.id}}">Supprimer</a></td>
+                            <td><a href="/admin/campus/{{campus.id}}">Modifier</a> - <a href="/admin/campus/delete/{{campus.id}}">Supprimer</a></td>
                         </tr>
                     {% endfor %}
 					</tbody>
