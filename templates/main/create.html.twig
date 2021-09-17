@@ -1,43 +1,111 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <h2>Créer une sortie</h2>
+
+
+    {{ form_start(sortieForm) }}
+     <div class="min-h-screen p-6 bg-gray-100 flex items-center justify-center">
+    <div class="container max-w-screen-lg mx-auto">
     <div>
-        {{ form_start(sortieForm) }}
-        {# {{ form_widget(sortieForm) }} #}
-        {{ form_errors(sortieForm) }}
-        <div class="group">
-            {{ form_row(sortieForm.nom) }}
-            {{ form_row(sortieForm.dateHeureDebut) }}
-            {{ form_row(sortieForm.dateLimiteInscription) }}
-            {{ form_row(sortieForm.nbInscriptionsMax) }}
-            {{ form_row(sortieForm.duree) }}
-            {{ form_row(sortieForm.infosSortie) }}
-        </div>
-        <br>
-        <br>
+      <h2 class="font-semibold text-xl text-gray-600">Créer une sortie</h2>
+      <p class="text-gray-500 mb-6">Enregistre une nouvelle sortie.</p>
 
-        <div class="group">
-            {{ form_row(sortieForm.campus) }}
-            {{ form_row(sortieForm.ville) }}
-            {{ form_rest(sortieForm) }}
-            <p><span>Rue: </span><span id="rue"></span></p>
-            <p><span>Code Postal: </span><span id="codePostal"></span></p>
-            <p><span>Latitude: </span><span id="latitude"></span></p>
-            <p><span>Longitude: </span><span id="longitude"></span></p>
-            <input type="submit" name="create" value="create">
-            <input type="submit" name="publish" value="publish">
-            <a href="{{ path('Main') }}"><button type="button" class="btn">Annuler</button></a>
-            <a href="/lieu/add"> Ajouter un lieu </a>
-        </div>
-        <br>
-        <br>
+      <div class="bg-white rounded shadow-lg p-4 px-4 md:p-8 mb-6">
+        <div class="grid gap-4 gap-y-2 text-sm grid-cols-1 lg:grid-cols-3">
+          <div class="text-gray-600">
+            <p class="font-medium text-lg">Informations sur la sortie</p>
+            <p>Pense à remplir tout les champs.</p>
+          </div>
 
-        {{ form_end(sortieForm) }}
+          <div class="lg:col-span-2">
+            <div class="grid gap-4 gap-y-2 text-sm grid-cols-1 md:grid-cols-5">
+              <div class="md:col-span-3">
+                <label for="full_name">Nom</label>
+                {{ form_widget(sortieForm.nom, {'attr': {'class': 'h-10 border mt-1 rounded px-4 w-full bg-gray-50'}}) }}
+                {% if form_errors(sortieForm.nom) %}
+                <div class="mt-1 px-4 py-2 rounded-lg border border-red-500 text-red-600 placeholder-red-600 focus:outline-none focus:ring-2 focus:ring-red-200">
+                  {{ form_errors(sortieForm.nom) }}
+                </div>
+                {% endif %}
+              </div>
+
+              <div class="md:col-span-2">
+                <label for="full_name">Date heure de début</label>
+                {{ form_widget(sortieForm.dateHeureDebut, {'attr': {'class': 'h-10 border mt-1 rounded px-4 w-full bg-gray-50'}}) }}
+                {% if form_errors(sortieForm.dateHeureDebut) %}
+                <div class="mt-1 px-4 py-2 rounded-lg border border-red-500 text-red-600 placeholder-red-600 focus:outline-none focus:ring-2 focus:ring-red-200">
+                  {{ form_errors(sortieForm.dateHeureDebut) }}
+                </div>
+                {% endif %}
+              </div>
+
+              <div class="md:col-span-3">
+                <label for="email">Date limite inscription</label>
+                {{ form_widget(sortieForm.dateLimiteInscription, {'attr': {'class': 'h-10 border mt-1 rounded px-4 w-full bg-gray-50'}}) }}
+                {% if form_errors(sortieForm.dateLimiteInscription) %}
+                <div class="mt-1 px-4 py-2 rounded-lg border border-red-500 text-red-600 placeholder-red-600 focus:outline-none focus:ring-2 focus:ring-red-200">
+                  {{ form_errors(sortieForm.dateLimiteInscription) }}
+                </div>
+                {% endif %}
+              </div>
+
+              <div class="md:col-span-2">
+                <label for="address">Nombre inscriptions max</label>
+                {{ form_widget(sortieForm.nbInscriptionsMax, {'attr': {'class': 'h-10 border mt-1 rounded px-4 w-full bg-gray-50'}}) }}
+                {% if form_errors(sortieForm.nbInscriptionsMax) %}
+                <div class="mt-1 px-4 py-2 rounded-lg border border-red-500 text-red-600 placeholder-red-600 focus:outline-none focus:ring-2 focus:ring-red-200">
+                  {{ form_errors(sortieForm.nbInscriptionsMax) }}
+                </div>
+                {% endif %}
+              </div>
+
+              <div class="md:col-span-3">
+                <label for="city">Durée</label>
+                {{ form_widget(sortieForm.duree, {'attr': {'class': 'h-10 border mt-1 rounded px-4 w-full bg-gray-50'}}) }}
+                {% if form_errors(sortieForm.duree) %}
+                <div class="mt-1 px-4 py-2 rounded-lg border border-red-500 text-red-600 placeholder-red-600 focus:outline-none focus:ring-2 focus:ring-red-200">
+                  {{ form_errors(sortieForm.duree) }}
+                </div>
+                {% endif %}
+              </div>
+
+              <div class="md:col-span-2">
+                <label for="city">Infos sortie</label>
+                {{ form_widget(sortieForm.infosSortie, {'attr': {'class': 'h-10 border mt-1 rounded px-4 w-full bg-gray-50'}}) }}
+                {% if form_errors(sortieForm.infosSortie) %}
+                <div class="mt-1 px-4 py-2 rounded-lg border border-red-500 text-red-600 placeholder-red-600 focus:outline-none focus:ring-2 focus:ring-red-200">
+                  {{ form_errors(sortieForm.infosSortie) }}
+                </div>
+                {% endif %}
+              </div>
+
+              <div class="md:col-span-2">
+                <label for="zipcode">Ville</label>
+                 {{ form_widget(sortieForm.ville, {'attr': {'class': 'mt-1 w-full'}}) }}
+                 {% if form_errors(sortieForm.ville) %}
+                <div class="mt-1 px-4 py-2 rounded-lg border border-red-500 text-red-600 placeholder-red-600 focus:outline-none focus:ring-2 focus:ring-red-200">
+                  {{ form_errors(sortieForm.ville) }}
+                </div>
+                {% endif %}
+              </div>
+
+                <div class="md:col-span-2">
+                 {{ form_rest(sortieForm) }}
+                </div>
+
+              <div class="md:col-span-5 text-right">
+                <div class="inline-flex items-end">
+                  <button type="submit" class="bg-green-500 hover:bg-green-400 text-white font-bold py-2 px-4 rounded">Valider</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
         
-        <br>
-        <br>
     </div>
+
+{{ form_end(sortieForm) }}
 
     <script>
         const inputLieu = document.querySelector('.lieuInput');
