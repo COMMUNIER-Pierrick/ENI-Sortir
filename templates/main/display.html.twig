@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Sortir.com{% endblock %}
+{% block title %}Affichage de la sortie{% endblock %}
 
 {% block body %}
 
@@ -54,27 +54,27 @@
                     <label for="full_name">Campus</label>
                     <p class="p-2 border mt-1 rounded px-4 w-full bg-gray-50"> {{ sortie.campus.nom }} </p>
                 </div>
-                
+
                 <div class="md:col-span-2">
                     <label for="full_name">Lieu</label>
                     <p class="p-2 border mt-1 rounded px-4 w-full bg-gray-50"> {{ sortie.lieu.nom }} </p>
                 </div>
-                
+
                 <div class="md:col-span-2">
                     <label for="full_name">Rue</label>
                     <p class="p-2 border mt-1 rounded px-4 w-full bg-gray-50"> {{ sortie.lieu.rue }} </p>
                 </div>
-                
+
                 <div class="md:col-span-2">
                     <label for="full_name">Code postal</label>
                     <p class="p-2 border mt-1 rounded px-4 w-full bg-gray-50"> {{ sortie.lieu.ville.codePostal }} </p>
                 </div>
-                
+
                 <div class="md:col-span-2">
                     <label for="full_name">Latitude</label>
                     <p class="p-2 border mt-1 rounded px-4 w-full bg-gray-50"> {{ sortie.lieu.latitude }} </p>
                 </div>
-                
+
                 <div class="md:col-span-2">
                     <label for="full_name">Longitude</label>
                     <p class="p-2 border mt-1 rounded px-4 w-full bg-gray-50"> {{ sortie.lieu.longitude }} </p>
@@ -104,13 +104,13 @@
                         {% if inscription == true %}
                         <div class="md:col-span-5 text-right">
                             <div class="inline-flex items-end">
-                                <a href="?inscription=false" class="bg-green-500 hover:bg-green-400 text-white font-bold py-2 px-4 rounded">Se désister </a> 
+                                <a href="?inscription=false" class="bg-green-500 hover:bg-green-400 text-white font-bold py-2 px-4 rounded">Se désister </a>
                             </div>
                         </div>
                         {% else %}
                         <div class="md:col-span-5 text-right">
                             <div class="inline-flex items-end">
-                                <a href="?inscription=true" class="bg-green-500 hover:bg-green-400 text-white font-bold py-2 px-4 rounded">S'inscrire </a> 
+                                <a href="?inscription=true" class="bg-green-500 hover:bg-green-400 text-white font-bold py-2 px-4 rounded">S'inscrire </a>
                             </div>
                         </div>
                         {% endif %}
@@ -122,10 +122,10 @@
           </div>
         </div>
       </div>
-        
+
     </div>
   </div>
-</div> 
+</div>
 
 {% endblock %}
 

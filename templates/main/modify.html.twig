@@ -1,6 +1,8 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Sortir.com{% endblock %}
+{% block title %}
+Modification de la sortie
+{% endblock %}
 
 
 {% block body %}
@@ -107,7 +109,7 @@
           </div>
         </div>
       </div>
-        
+
     </div>
 
 {{ form_end(sortieForm) }}
@@ -134,8 +136,12 @@
             const inputLieu = document.querySelector('.lieuInput');
             requete.open("GET", "lieu/" + inputLieu.value, true);
             requete.send();
+        }
+        const inputLieu = document.querySelector('.lieuInput');
+        console.log(inputLieu);
+        inputLieu.addEventListener("change", function(event) {
+           loadLieu();
         });
     </script>
-
 {% endblock %}
 
