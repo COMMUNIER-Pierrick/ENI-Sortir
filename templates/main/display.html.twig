@@ -5,58 +5,129 @@
 {% endblock %}
 
 {% block body %}
-    <h2>Afficher une sortie</h2>
-    <br>
 
-    <div class="group">
-        <p>Nom de la sortie: {{ sortie.nom }}</p>
-        <p>Date et heure de la sortie: {{ sortie.dateHeureDebut|date("d/m/Y H:i") }}</p>
-        <p>Date limite d'inscription: {{ sortie.dateLimiteInscription|date("d/m/Y") }}</p>
-        <p>Nombre de places: {{ sortie.nbInscriptionsMax }}</p>
-        <p>Duree: {{ sortie.duree }} minutes</p>
-        <p>Description et infos: {{ sortie.infosSortie }}</p>
+
+    <div class="min-h-screen p-6 bg-gray-100 flex items-center justify-center">
+  <div class="container max-w-screen-lg mx-auto">
+    <div>
+      <h2 class="font-semibold text-xl text-gray-600">Afficher une sortie</h2>
+      <p class="text-gray-500 mb-6">Accéder à toutes ces données.</p>
+
+      <div class="bg-white rounded shadow-lg p-4 px-4 md:p-8 mb-6">
+        <div class="grid gap-4 gap-y-2 text-sm grid-cols-1 lg:grid-cols-3">
+          <div class="text-gray-600 text-center md:text-left">
+            <p class="font-medium text-lg">Informations concernant la sortie</p>
+          </div>
+
+
+          <div class="lg:col-span-2">
+            <div class="grid gap-4 gap-y-2 text-sm grid-cols-1 md:grid-cols-5">
+              <div class="md:col-span-3">
+                <label for="full_name">Nom</label>
+                <p class="p-2 border mt-1 rounded px-4 w-full bg-gray-50"> {{ sortie.nom }} </p>
+              </div>
+
+              <div class="md:col-span-2">
+                <label for="full_name">Date et heure de la sortie</label>
+                <p class="p-2 border mt-1 rounded px-4 w-full bg-gray-50"> {{ sortie.dateHeureDebut|date("d/m/Y H:i") }} </p>
+              </div>
+
+              <div class="md:col-span-3">
+                <label for="full_name">Date limite d'inscription</label>
+                <p class="p-2 border mt-1 rounded px-4 w-full bg-gray-50"> {{ sortie.dateLimiteInscription|date("d/m/Y") }} </p>
+              </div>
+
+              <div class="md:col-span-2">
+                <label for="full_name">Nombre de places</label>
+                <p class="p-2 border mt-1 rounded px-4 w-full bg-gray-50"> {{ sortie.nbInscriptionsMax }} </p>
+              </div>
+
+              <div class="md:col-span-3">
+                <label for="full_name">Duree</label>
+                <p class="p-2 border mt-1 rounded px-4 w-full bg-gray-50"> {{ sortie.duree }} </p>
+              </div>
+
+                <div class="md:col-span-2">
+                    <label for="full_name">Description et infos</label>
+                    <p class="p-2 border mt-1 rounded px-4 w-full bg-gray-50"> {{ sortie.infosSortie }} </p>
+                </div>
+
+                <div class="md:col-span-2">
+                    <label for="full_name">Campus</label>
+                    <p class="p-2 border mt-1 rounded px-4 w-full bg-gray-50"> {{ sortie.campus.nom }} </p>
+                </div>
+                
+                <div class="md:col-span-2">
+                    <label for="full_name">Lieu</label>
+                    <p class="p-2 border mt-1 rounded px-4 w-full bg-gray-50"> {{ sortie.lieu.nom }} </p>
+                </div>
+                
+                <div class="md:col-span-2">
+                    <label for="full_name">Rue</label>
+                    <p class="p-2 border mt-1 rounded px-4 w-full bg-gray-50"> {{ sortie.lieu.rue }} </p>
+                </div>
+                
+                <div class="md:col-span-2">
+                    <label for="full_name">Code postal</label>
+                    <p class="p-2 border mt-1 rounded px-4 w-full bg-gray-50"> {{ sortie.lieu.ville.codePostal }} </p>
+                </div>
+                
+                <div class="md:col-span-2">
+                    <label for="full_name">Latitude</label>
+                    <p class="p-2 border mt-1 rounded px-4 w-full bg-gray-50"> {{ sortie.lieu.latitude }} </p>
+                </div>
+                
+                <div class="md:col-span-2">
+                    <label for="full_name">Longitude</label>
+                    <p class="p-2 border mt-1 rounded px-4 w-full bg-gray-50"> {{ sortie.lieu.longitude }} </p>
+                </div>
+                <div class="md:col-span-5 m-5">
+                    <h3>Liste des participants inscrits:</h3>
+
+                    {% if sortie.users.count >0 %}
+                        <table>
+                            <tr>
+                                <th>Pseudo</th>
+                                <th>Nom</th>
+                            </tr>
+                            {% for user in sortie.users %}
+                                <tr>
+                                    <th>{{ user.pseudo }}</th>
+                                    <th>{{ user.prenom }} {{ user.nom|upper }}</th>
+                                </tr>
+                            {% endfor %}
+                        </table>
+                    {% else %}
+                        <p>Pas de participants inscrits</p>
+                    {% endif %}
+                    <br>
+
+                    {% if sortie.etatSortie.id == 2 %}
+                        {% if inscription == true %}
+                        <div class="md:col-span-5 text-right">
+                            <div class="inline-flex items-end">
+                                <a href="?inscription=false" class="bg-green-500 hover:bg-green-400 text-white font-bold py-2 px-4 rounded">Se désister </a> 
+                            </div>
+                        </div>
+                        {% else %}
+                        <div class="md:col-span-5 text-right">
+                            <div class="inline-flex items-end">
+                                <a href="?inscription=true" class="bg-green-500 hover:bg-green-400 text-white font-bold py-2 px-4 rounded">S'inscrire </a> 
+                            </div>
+                        </div>
+                        {% endif %}
+                    {% else %}
+                        <p>Vous ne pouvez pas vous inscrire à cette sortie.</p>
+                    {% endif %}
+                </div>
+            </div>
+          </div>
+        </div>
+      </div>
+        
     </div>
-    <br>
-
-    <div class="group">
-        <p>Campus: {{ sortie.campus.nom }}</p>
-        <p>Lieu: {{ sortie.lieu.nom }}</p>
-        <p>Rue: {{ sortie.lieu.rue }}</p>
-        <p>Code postal: {{ sortie.lieu.ville.codePostal }}</p>
-        <p>Latitude: {{ sortie.lieu.latitude }}</p>
-        <p>Longitude: {{ sortie.lieu.longitude }}</p>
-    </div>
-    <br>
-
-    <h3>Liste des participants inscrits:</h3>
-
-    {% if sortie.users.count >0 %}
-        <table>
-            <tr>
-                <th>Pseudo</th>
-                <th>Nom</th>
-            </tr>
-            {% for user in sortie.users %}
-                <tr>
-                    <th>{{ user.pseudo }}</th>
-                    <th>{{ user.prenom }} {{ user.nom|upper }}</th>
-                </tr>
-            {% endfor %}
-        </table>
-    {% else %}
-        <p>Pas de participants inscrits</p>
-    {% endif %}
-    <br>
-
-    {% if sortie.etatSortie.id == 2 %}
-        {% if inscription == true %}
-            <a href="?inscription=false"> Se désister </a>
-        {% else %}
-            <a href="?inscription=true"> S'inscrire </a>
-        {% endif %}
-    {% else %}
-        <p>Vous ne pouvez pas vous inscrire à cette sortie.</p>
-    {% endif %}
+  </div>
+</div> 
 
 {% endblock %}
 
