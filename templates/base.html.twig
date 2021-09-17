@@ -7,11 +7,14 @@
         <meta http-equiv="X-UA-Compatible" content="ie=edge">
         <title>{% block title %}Welcome!{% endblock %}</title>
 {% block stylesheets %}
-    {{ encore_entry_link_tags('app') }} 
-    
+    {{ encore_entry_link_tags('app') }}
+
 {% endblock %}
+{% block stylesheets %}{{ encore_entry_link_tags('app') }}{% endblock %}
+		{% block stylesb %}{% endblock %}
+
     </head>
-    <body>
+    <body class="bg-gray-100 text-gray-900 tracking-wider leading-normal">
     <header>
     {% if is_granted("ROLE_ADMIN") or is_granted("ROLE_USER") %}
         <nav class="bg-white shadow-lg">
@@ -135,7 +138,7 @@
     </footer>
     {% block javascripts %}
         {{ encore_entry_script_tags('app') }}
-        
+
     {% endblock %}
     </body>
 </html>
