@@ -3,28 +3,102 @@
 {% block title %}Hello UserController!{% endblock %}
 
 {% block body %}
-<div>
-    <h3>Mon profil</h3>
 
-    {{ form_start(form) }}
+{{ form_start(form) }}
+  <div class="min-h-screen p-6 bg-gray-100 flex items-center justify-center">
+  <div class="container max-w-screen-lg mx-auto">
+    <div>
+      <h2 class="font-semibold text-xl text-gray-600">Modification</h2>
+      <p class="text-gray-500 mb-6">Modifier votre profil.</p>
 
-    {{ form_row(form.pseudo) }}
-    {{ form_row(form.prenom) }}
-    {{ form_row(form.nom) }}
-    {{ form_row(form.telephone) }}
-    {{ form_row(form.campus) }}
-    {{ form_label(form.picture) }}
-    {{ form_errors(form.picture) }}
-    {{ form_widget(form.picture, {'attr': {'class': 'image', 'accept': ".png,.jpg,.jpeg"}}) }}
-    {{ form_help(form.picture) }}
+      <div class="bg-white rounded shadow-lg p-4 px-4 md:p-8 mb-6">
+        <div class="grid gap-4 gap-y-2 text-sm grid-cols-1 lg:grid-cols-3">
+          <div class="text-gray-600">
+            <p class="font-medium text-lg">Informations personnelles</p>
+            <p>Pense à remplir tout les champs.</p>
+          </div>
 
-    {{ form_end(form) }}
+          <div class="lg:col-span-2">
+            <div class="grid gap-4 gap-y-2 text-sm grid-cols-1 md:grid-cols-5">
+              <div class="md:col-span-3">
+                <label for="full_name">Pseudo</label>
+                {{ form_widget(form.pseudo, {'attr': {'class': 'h-10 border mt-1 rounded px-4 w-full bg-gray-50'}}) }}
+                {% if form_errors(form.pseudo) %}
+                <div class="mt-1 px-4 py-2 rounded-lg border border-red-500 text-red-600 placeholder-red-600 focus:outline-none focus:ring-2 focus:ring-red-200">
+                  {{ form_errors(form.pseudo) }}
+                </div>
+                {% endif %}
+              </div>
+
+              <div class="md:col-span-2">
+                <label for="full_name">Prenom</label>
+                {{ form_widget(form.prenom, {'attr': {'class': 'h-10 border mt-1 rounded px-4 w-full bg-gray-50'}}) }}
+                {% if form_errors(form.prenom) %}
+                <div class="mt-1 px-4 py-2 rounded-lg border border-red-500 text-red-600 placeholder-red-600 focus:outline-none focus:ring-2 focus:ring-red-200">
+                  {{ form_errors(form.prenom) }}
+                </div>
+                {% endif %}
+              </div>
+
+              <div class="md:col-span-3">
+                <label for="email">Nom</label>
+                {{ form_widget(form.nom, {'attr': {'class': 'h-10 border mt-1 rounded px-4 w-full bg-gray-50'}}) }}
+                {% if form_errors(form.nom) %}
+                <div class="mt-1 px-4 py-2 rounded-lg border border-red-500 text-red-600 placeholder-red-600 focus:outline-none focus:ring-2 focus:ring-red-200">
+                  {{ form_errors(form.nom) }}
+                </div>
+                {% endif %}
+              </div>
+
+              <div class="md:col-span-2">
+                <label for="address">Telephone</label>
+                {{ form_widget(form.telephone, {'attr': {'class': 'h-10 border mt-1 rounded px-4 w-full bg-gray-50'}}) }}
+                {% if form_errors(form.telephone) %}
+                <div class="mt-1 px-4 py-2 rounded-lg border border-red-500 text-red-600 placeholder-red-600 focus:outline-none focus:ring-2 focus:ring-red-200">
+                  {{ form_errors(form.telephone) }}
+                </div>
+                {% endif %}
+              </div>
+
+              <div class="md:col-span-3">
+                <label for="city">Campus</label>
+                {{ form_widget(form.campus, {'attr': {'class': 'h-10 border mt-1 rounded px-4 w-full bg-gray-50'}}) }}
+                {% if form_errors(form.campus) %}
+                <div class="mt-1 px-4 py-2 rounded-lg border border-red-500 text-red-600 placeholder-red-600 focus:outline-none focus:ring-2 focus:ring-red-200">
+                  {{ form_errors(form.campus) }}
+                </div>
+                {% endif %}
+              </div>
+
+              <div class="md:col-span-2">
+                <label for="city">Picture</label>
+                {{ form_widget(form.picture, {'attr': {'class': 'image h-10 border mt-1 rounded px-4 w-full bg-gray-50', 'accept': ".png,.jpg,.jpeg"}}) }}
+                {% if form_errors(form.picture) %}
+                <div class="mt-1 px-4 py-2 rounded-lg border border-red-500 text-red-600 placeholder-red-600 focus:outline-none focus:ring-2 focus:ring-red-200">
+                  {{ form_errors(form.picture) }}
+                </div>
+                {% endif %}
+              </div>
+
+              <div class="md:col-span-5 text-right">
+                <div class="inline-flex items-end">
+                  <button type="submit" class="bg-green-500 hover:bg-green-400 text-white font-bold py-2 px-4 rounded">Valider</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+        
+    </div>
+  </div>
+</div>
+{{ form_end(form) }}
 
     {% if user.picture %}
     <img id="showImg" height="64" src="/uploads/{{ user.picture.image }}" alt="">
     {% endif %}
 
-</div>
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script>
   function readURL(input) {
