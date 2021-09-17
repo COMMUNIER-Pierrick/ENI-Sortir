@@ -2,12 +2,10 @@
 
 namespace App\Controller;
 
-<<<<<<< HEAD
+
 use App\Entity\Message;
-=======
 use App\Entity\Lieu;
 use App\Entity\Ville;
->>>>>>> c8bb3dd (lieu form)
 use App\Entity\Sortie;
 use App\Form\FilterType;
 use App\Form\AnnulationType;
@@ -18,14 +16,10 @@ use App\Repository\UserRepository;
 use App\Repository\SortieRepository;
 use App\Repository\VilleRepository;
 use Doctrine\ORM\EntityManagerInterface;
-<<<<<<< HEAD
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
-=======
->>>>>>> c8bb3dd (lieu form)
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 
 class MainController extends AbstractController
@@ -118,6 +112,8 @@ class MainController extends AbstractController
 
         $searchData = $filterForm->getData();
         $sorties = $sortieRepository->findAllTripsWithFilter($this->getUser(), $searchData);
+
+        /*
         $idUser = $user->getId();
 
         $i = 0;
@@ -135,6 +131,7 @@ class MainController extends AbstractController
                 $i++;
             }
         }
+        */
 
         return $this->render('main/index.html.twig', [
             "sorties" => $sorties,
@@ -204,26 +201,10 @@ class MainController extends AbstractController
 
         if ($sortieForm->isSubmitted() && $sortieForm->isValid()) {
 
-<<<<<<< HEAD
             $dateLimite = $sortie->getDateLimiteInscription();
             $dateFin = $sortie->getDateHeureDebut();
 
             if($dateLimite < $dateFin) {
-=======
-            if ($sortieForm->getClickedButton() && 'cancel' === $sortieForm->getClickedButton()->getName()) {
-                return $this->redirectToRoute('Main');
-            } else {
-                // CODE ICI
-                if ($sortieForm->getClickedButton() && 'publish' === $sortieForm->getClickedButton()->getName()) {
-                    $etat = $etatRepository->findAll()[1];
-                    $sortie->setEtatSortie($etat);
-                    $this->addFlash('success', 'Your trip is open to inscriptions!');
-                } else {
-                    $etat = $etatRepository->findAll()[0];
-                    $sortie->setEtatSortie($etat);
-                    $this->addFlash('success', 'Your trip data has been saved!');
-                }
->>>>>>> c8bb3dd (lieu form)
 
                 $nbMaxParticipant = $sortie->getNbInscriptionsMax();
 
@@ -287,35 +268,29 @@ class MainController extends AbstractController
 
         if ($sortieForm->isSubmitted() && $sortieForm->isValid()) {
 
-<<<<<<< HEAD
-=======
-            if ($sortieForm->getClickedButton() && 'cancel' === $sortieForm->getClickedButton()->getName()) {
-                return $this->redirectToRoute('Main');
+
+            if ($sortieForm->getClickedButton() && 'publish' === $sortieForm->getClickedButton()->getName()) {
+                $etat = $etatRepository->findAll()[1];
+                $sortie->setEtatSortie($etat);
+                $this->addFlash('success', 'La sortie a été publiée!');
+            } elseif ($sortieForm->getClickedButton() && 'create' === $sortieForm->getClickedButton()->getName()){
+                $etat = $etatRepository->findAll()[0];
+                $sortie->setEtatSortie($etat);
+                $this->addFlash('success', 'La sortie a été modifiée!');
             } else {
-
->>>>>>> c8bb3dd (lieu form)
-                if ($sortieForm->getClickedButton() && 'publish' === $sortieForm->getClickedButton()->getName()) {
-                    $etat = $etatRepository->findAll()[1];
-                    $sortie->setEtatSortie($etat);
-                    $this->addFlash('success', 'La sortie a été publiée!');
-                } elseif ($sortieForm->getClickedButton() && 'create' === $sortieForm->getClickedButton()->getName()){
-                    $etat = $etatRepository->findAll()[0];
-                    $sortie->setEtatSortie($etat);
-                    $this->addFlash('success', 'La sortie a été modifiée!');
-                } else {
-                    $entityManager->remove($sortie);
-                    $entityManager->flush();
-
-                    return $this->redirectToRoute('Main');
-
-                }
-
-                $entityManager->persist($sortie);
+                $entityManager->remove($sortie);
                 $entityManager->flush();
 
+                return $this->redirectToRoute('Main');
 
-                return $this->redirectToRoute('Main_display', ['id' => $sortie->getId()]);
             }
+
+            $entityManager->persist($sortie);
+            $entityManager->flush();
+
+
+            return $this->redirectToRoute('Main_display', ['id' => $sortie->getId()]);
+        }
 
         return $this->render('main/modify.html.twig', [
             'sortieForm' => $sortieForm->createView()
