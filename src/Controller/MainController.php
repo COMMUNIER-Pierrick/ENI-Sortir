@@ -113,26 +113,6 @@ class MainController extends AbstractController
         $searchData = $filterForm->getData();
         $sorties = $sortieRepository->findAllTripsWithFilter($this->getUser(), $searchData);
 
-        /*
-        $idUser = $user->getId();
-
-        $i = 0;
-        $role = $user->getRoles();
-
-        if($role == ["ROLE_USER"]) {
-            foreach ($sorties as $sortie) {
-
-                $idOrganisateur = $sortie->getOrganisateur()->getId();
-                $idEtat = $sortie->getEtatSortie()->getId();
-
-                if ($idOrganisateur != $idUser && $idEtat == 1) {
-                    unset($sorties[$i]);
-                }
-                $i++;
-            }
-        }
-        */
-
         return $this->render('main/index.html.twig', [
             "sorties" => $sorties,
             "utilisateur" => $user,
@@ -299,12 +279,6 @@ class MainController extends AbstractController
 
                     return $this->redirectToRoute('Main');
                 }
-
-                $entityManager->persist($sortie);
-                $entityManager->flush();
-
-
-                return $this->redirectToRoute('Main_display', ['id' => $sortie->getId()]);
             }
         }
         return $this->render('main/modify.html.twig', [

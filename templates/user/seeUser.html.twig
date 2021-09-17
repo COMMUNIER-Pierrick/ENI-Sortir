@@ -11,10 +11,14 @@
             <li><span>Nom:</span><span>{{user.nom}}</span></li>
             <li><span>Téléphone:</span><span>{{user.telephone}}</span></li>
             <li><span>Email:</span><span>{{user.email}}</span></li>
+            {% if user.campus.nom is defined and user.campus.nom is not null %}
             <li><span>Campus:</span><span>{{user.campus.nom}}</span></li>
+            {% endif %}
         </ul>
     </div>
+    {% if user.picture.image is defined and user.picture.image is not null %}
     <img src="/uploads/{{ user.picture.image }}" alt="" width="64" height="64">
+    {% endif %}
     <a href="/">Retour</a>
 </div>    
 {% endblock %}
