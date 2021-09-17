@@ -4,10 +4,8 @@ namespace App\Controller;
 
 
 use App\Entity\Message;
-
 use App\Entity\Lieu;
 use App\Entity\Ville;
-
 use App\Entity\Sortie;
 use App\Form\FilterType;
 use App\Form\AnnulationType;
@@ -18,12 +16,11 @@ use App\Repository\UserRepository;
 use App\Repository\SortieRepository;
 use App\Repository\VilleRepository;
 use Doctrine\ORM\EntityManagerInterface;
-
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
-
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+
 
 class MainController extends AbstractController
 {
@@ -115,6 +112,8 @@ class MainController extends AbstractController
 
         $searchData = $filterForm->getData();
         $sorties = $sortieRepository->findAllTripsWithFilter($this->getUser(), $searchData);
+
+        /*
         $idUser = $user->getId();
 
         $i = 0;
@@ -132,6 +131,7 @@ class MainController extends AbstractController
                 $i++;
             }
         }
+        */
 
         return $this->render('main/index.html.twig', [
             "sorties" => $sorties,
@@ -205,6 +205,7 @@ class MainController extends AbstractController
             $dateLimite = $sortie->getDateLimiteInscription();
             $dateFin = $sortie->getDateHeureDebut();
 
+            if($dateLimite < $dateFin) {
             if ($dateLimite < $dateFin) {
 
                 if ($request->request->get('cancel')) {
@@ -299,8 +300,8 @@ class MainController extends AbstractController
                     return $this->redirectToRoute('Main');
                 }
 
-            $entityManager->persist($sortie);
-            $entityManager->flush();
+                $entityManager->persist($sortie);
+                $entityManager->flush();
 
 
                 return $this->redirectToRoute('Main_display', ['id' => $sortie->getId()]);
