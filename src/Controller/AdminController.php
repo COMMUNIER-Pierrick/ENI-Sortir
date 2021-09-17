@@ -17,16 +17,13 @@ class AdminController extends AbstractController
 
     public function deactivateUser()
     {
-
     }
 
     public function deleteUser()
     {
-
     }
 
     public function cancelTrip()
     {
-
     }
 }

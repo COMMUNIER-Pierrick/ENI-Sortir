@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Administrateur{% endblock %}
+{% block title %}Sortir.com{% endblock %}
 
 {% block body %}
 
@@ -12,20 +12,14 @@
     </div>
     <nav class="m-4">
         <ul>
-            <li class="mt-2">
+            <li class="mt-3 p-2 bg-green-200 rounded md:w-1/2 mx-auto">
                 <a href="{{ path('Admin_register') }}" title="Go back to new registerpage">Ajout d'un nouvel utilisateur</a>
             </li>
-            <li class="mt-2">
+            <li class="mt-3 p-2 bg-green-200 rounded md:w-1/2 mx-auto">
                 <a href="{{ path('Admin_register_file') }}" title="Go back to new registerfilepage">Ajout de nouvel utilisateur(s) via un fichier</a>
             </li>
-            <li class="mt-2">
-                <a href="{{ path('Admin_deactivateUser') }}" title="Go back to deactivatepage">Désactiver un utilisateur</a>
-            </li>
-            <li class="mt-2">
-                <a href="{{ path('Admin_deleteUser') }}" title="Go back to new deletepage">Supprimer un utilisateur</a>
-            </li>
-            <li class="mt-2">
-                <a href="{{ path('Admin_cancelTrip') }}" title="Go back to new cancelpage">Annuler une sortie</a>
+            <li class="mt-3 p-2 bg-green-200 rounded md:w-1/2 mx-auto">
+                <a href="{{ path('All_users') }}" title="Go back to deactivatepage">Désactiver et supprimer un utilisateur</a>
             </li>
         </ul>
     </nav>

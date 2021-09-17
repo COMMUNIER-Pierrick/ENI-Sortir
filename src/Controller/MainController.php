@@ -25,12 +25,13 @@ use Symfony\Component\HttpFoundation\Response;
 class MainController extends AbstractController
 {
 
-    public function index(SortieRepository       $sortieRepository,
-                          Request                $request,
-                          UserRepository         $userRepository,
-                          EtatRepository         $etatRepository,
-                          EntityManagerInterface $entityManager): Response
-    {
+    public function index(
+        SortieRepository $sortieRepository,
+        Request $request,
+        UserRepository $userRepository,
+        EtatRepository $etatRepository,
+        EntityManagerInterface $entityManager
+    ): Response {
 
         $user = $userRepository->findOneBy(
             [
@@ -50,7 +51,7 @@ class MainController extends AbstractController
         $filterForm = $this->createForm(FilterType::class, $searchData);
 
         $sorties = $sortieRepository->findAllTripsWithFilter($this->getUser(), $searchData);
-        foreach ($sorties as $sortie) {
+        foreach ($sorties as $sortie){
 
             date_default_timezone_set('Europe/Paris');
             $dateNow = date("Y-m-d H:i");
@@ -60,15 +61,15 @@ class MainController extends AbstractController
             $dateFin = $sortie->getDateHeureDebut();
             $stringDate = $dateFin->format("Y-m-d H:i");
             $duree = $sortie->getDuree();
-            $dateFin = date("Y-m-d H:i", strtotime($stringDate . '+' . $duree . 'hours'));
+            $dateFin = date("Y-m-d H:i", strtotime($stringDate.'+'.$duree.'hours'));
 
             $etatSortie = $sortie->getEtatSortie()->getId();
 
-            if ($etatSortie != 7 || $etatSortie != 1) {
+            if($etatSortie != 7 || $etatSortie != 1){
 
                 $interval = abs(strtotime($dateNow) - strtotime($dateFin));
                 $years = floor($interval / 31536000);
-                $months = floor(($interval - $years * 31536000) / (30 * 60 * 60 * 24));
+                $months = floor(($interval - $years*31536000) / (30*60*60*24));
 
                 if ($months > 1 && $etatSortie == 6 || $months == 1 && $etatSortie == 6 ||
                     $months > 1 && $etatSortie == 5 || $months == 1 && $etatSortie == 5) {
@@ -78,28 +79,28 @@ class MainController extends AbstractController
                     $entityManager->flush();
                 }
 
-                if ($etatSortie == 4 && $dateNow >= $dateFin) {
+                if($etatSortie == 4 && $dateNow >= $dateFin){
                     $etat = $etatRepository->findAll()[4];
                     $sortie->setEtatSortie($etat);
                     $entityManager->persist($sortie);
                     $entityManager->flush();
                 }
 
-                if ($etatSortie == 3 && $dateNow >= $sortie->getDateHeureDebut()) {
+                if($etatSortie == 3 && $dateNow >= $sortie->getDateHeureDebut()){
                     $etat = $etatRepository->findAll()[3];
                     $sortie->setEtatSortie($etat);
                     $entityManager->persist($sortie);
                     $entityManager->flush();
                 }
 
-                if ($etatSortie == 2 && $nbParticipant == $nbMaxParticipant || $etatSortie == 2 && $dateNow > $dateLimite) {
+                if($etatSortie == 2 && $nbParticipant == $nbMaxParticipant || $etatSortie == 2 && $dateNow > $dateLimite){
                     $etat = $etatRepository->findAll()[2];
                     $sortie->setEtatSortie($etat);
                     $entityManager->persist($sortie);
                     $entityManager->flush();
                 }
 
-                if ($etatSortie == 2 && $nbParticipant != $nbMaxParticipant || $etatSortie == 2 && $dateNow <= $dateLimite) {
+                if($etatSortie == 2 && $nbParticipant != $nbMaxParticipant || $etatSortie == 2 && $dateNow <= $dateLimite){
                     $etat = $etatRepository->findAll()[1];
                     $sortie->setEtatSortie($etat);
                     $entityManager->persist($sortie);
@@ -122,13 +123,12 @@ class MainController extends AbstractController
 
 
     public function display(
-        int                    $id,
-        SortieRepository       $sortieRepository,
+        int $id,
+        SortieRepository $sortieRepository,
         EntityManagerInterface $entityManager,
-        UserRepository         $userRepository,
-        Request                $request
-    ): Response
-    {
+        UserRepository $userRepository,
+        Request $request
+    ): Response {
         $sortie = $sortieRepository->find($id);
         $user = $userRepository->findOneBy(
             [
@@ -158,14 +158,14 @@ class MainController extends AbstractController
     }
 
 
+
     public function create(
-        Request                $request,
+        Request $request,
         EntityManagerInterface $entityManager,
-        UserRepository         $userRepository,
-        EtatRepository         $etatRepository,
-        LieuRepository         $lieuRepository
-    ): Response
-    {
+        UserRepository $userRepository,
+        EtatRepository $etatRepository,
+        LieuRepository $lieuRepository
+    ): Response {
 
         $user = $userRepository->findOneBy(
             [
@@ -187,63 +187,58 @@ class MainController extends AbstractController
             $dateFin = $sortie->getDateHeureDebut();
 
             if ($dateLimite < $dateFin) {
-                if ($dateLimite < $dateFin) {
 
-                    if ($request->request->get('cancel')) {
-                        return $this->redirectToRoute('Main');
+                if ($request->request->get('cancel')) {
+                    return $this->redirectToRoute('Main');
+                } else {
+                    if ($request->request->get('publish')) {
+                        $etat = $etatRepository->findAll()[1];
+                        $sortie->setEtatSortie($etat);
                     } else {
-                        if ($request->request->get('publish')) {
-                            $etat = $etatRepository->findAll()[1];
-                            $sortie->setEtatSortie($etat);
-                        } else {
-                            $etat = $etatRepository->findAll()[0];
-                            $sortie->setEtatSortie($etat);
-                        }
+                        $etat = $etatRepository->findAll()[0];
+                        $sortie->setEtatSortie($etat);
+                    }
 
-                        $nbMaxParticipant = $sortie->getNbInscriptionsMax();
+                    $nbMaxParticipant = $sortie->getNbInscriptionsMax();
 
-                        if ($nbMaxParticipant >= 2) {
+                    if ($nbMaxParticipant >= 2) {
 
-                            $duree = $sortie->getDuree();
+                        $duree = $sortie->getDuree();
 
-                            if ($duree >= 1) {
+                        if ($duree >= 1) {
 
-                                if ($request->request->get('publish')) {
-                                    $etat = $etatRepository->findAll()[1];
-                                    $sortie->setEtatSortie($etat);
-                                    $this->addFlash('success', 'La sortie a été publiée!');
-                                } else {
-                                    $etat = $etatRepository->findAll()[0];
-                                    $sortie->setEtatSortie($etat);
-                                    $this->addFlash('success', 'La sortie a été enregistrée!');
-                                }
-
-                                $entityManager->persist($sortie);
-                                $entityManager->flush();
-
-                                return $this->redirectToRoute('Main_display', ['id' => $sortie->getId()]);
+                            if ($request->request->get('publish')) {
+                                $etat = $etatRepository->findAll()[1];
+                                $sortie->setEtatSortie($etat);
+                                $this->addFlash('success', 'La sortie a été publiée!');
+                            } else {
+                                $etat = $etatRepository->findAll()[0];
+                                $sortie->setEtatSortie($etat);
+                                $this->addFlash('success', 'La sortie a été enregistrée!');
                             }
-                            $this->addFlash('warning', "Echec de l'inscription ! La durée doit être au moins égale à 1");
-                            return $this->render('main/create.html.twig', [
-                                'sortieForm' => $sortieForm->createView()
-                            ]);
+
+                            $entityManager->persist($sortie);
+                            $entityManager->flush();
+
+                            return $this->redirectToRoute('Main_display', ['id' => $sortie->getId()]);
                         }
-                        $this->addFlash('warning', "Echec de l'inscription ! Le nombre de place doit être égale ou supérieure à 2");
+                        $this->addFlash('warning', "Echec de l'inscription ! La durée doit être au moins égale à 1");
                         return $this->render('main/create.html.twig', [
                             'sortieForm' => $sortieForm->createView()
                         ]);
                     }
-                    $this->addFlash('warning', "Echec de l'inscription ! La date limite d'inscription ne peut pas être superieur a celle de la sortie");
+                    $this->addFlash('warning', "Echec de l'inscription ! Le nombre de place doit être égale ou supérieure à 2");
                     return $this->render('main/create.html.twig', [
                         'sortieForm' => $sortieForm->createView()
                     ]);
                 }
+                $this->addFlash('warning', "Echec de l'inscription ! La date limite d'inscription ne peut pas être superieur a celle de la sortie");
+                return $this->render('main/create.html.twig', [
+                    'sortieForm' => $sortieForm->createView()
+                ]);
             }
-            return $this->render('main/create.html.twig', [
-                'sortieForm' => $sortieForm->createView(),
-                'lieux' => $lieuRepository->findAll(),
-            ]);
         }
+
         return $this->render('main/create.html.twig', [
             'sortieForm' => $sortieForm->createView(),
             'lieux' => $lieuRepository->findAll(),
@@ -285,7 +280,11 @@ class MainController extends AbstractController
 
                     return $this->redirectToRoute('Main');
                 }
+
+                $entityManager->persist($sortie);
+                $entityManager->flush();
             }
+            return $this->redirectToRoute('Main_display', ['id' => $sortie->getId()]);
         }
         return $this->render('main/modify.html.twig', [
             'sortieForm' => $sortieForm->createView()
