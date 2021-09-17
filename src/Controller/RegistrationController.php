@@ -85,7 +85,7 @@ class RegistrationController extends AbstractController
 
             if ($file) {
                 $fileName = $fileUploader->upload($file);
-                $handleFile = file("../public/uploads/fileUser/" . $fileName);
+                $handleFile = file("../public/uploads/fileUser" . $fileName);
                 foreach ($handleFile as $key => $value) {
                     $newHandleFile[] = explode(',', $value);
                 }
