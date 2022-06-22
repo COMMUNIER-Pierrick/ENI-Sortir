@@ -63,7 +63,13 @@
         "preferred-install": {
             "*": "dist"
         },
-        "sort-packages": true
+        "sort-packages": true,
+        "allow-plugins": {
+            "symfony/flex": true,
+            "third-party/required-plugin": true,
+            "my-organization/*": true,
+            "unnecessary/plugin": false
+        }
     },
     "autoload": {
         "psr-4": {
