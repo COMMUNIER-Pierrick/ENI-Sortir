@@ -7,3 +7,7 @@ ENI-Sortir est une application web mettant en relation les élèves actifs ainsi
 ## Architecture
 
 Le projet utilise une base de données **MySQL**. Le language utilisé est **PHP** avec du **Twig** pour le front-end
+
+## Infos
+
+⚠Problème sur le **CCS** à certains endroits sur le site⚠
