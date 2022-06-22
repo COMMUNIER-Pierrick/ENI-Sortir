@@ -85,7 +85,7 @@ class RegistrationController extends AbstractController
 
             if ($file) {
                 $fileName = $fileUploader->upload($file);
-                $handleFile = file("../public/uploads/fileUser" . $fileName);
+                $handleFile = file("../public/uploads/fileUser/" . $fileName);
                 foreach ($handleFile as $key => $value) {
                     $newHandleFile[] = explode(',', $value);
                 }
@@ -127,8 +127,6 @@ class RegistrationController extends AbstractController
                                     $entityManager->persist($user);
                                     $entityManager->flush();
                                 } catch (Exception $e) {
-                                    throw new ErrorException();
-                                } finally {
                                     return $this->render('bundles/TwigBundle/Exception/error500.html.twig', [
                                         'error' => $error,
                                     ]);
@@ -139,6 +137,7 @@ class RegistrationController extends AbstractController
                 }
                 $this->addFlash('success', 'les inscriptions sont faites !');
             }
+
         }
         return $this->render('services/uploadFileUser.html.twig', [
             'UploadFileUserForm' => $form->createView(),
@@ -146,3 +145,4 @@ class RegistrationController extends AbstractController
         ]);
     }
 }
+
